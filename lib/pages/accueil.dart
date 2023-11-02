@@ -29,11 +29,12 @@ class _accueilState extends State<accueil> {
       body: pages[indexCourant],
       bottomNavigationBar: 
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration:  BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: const Color.fromARGB(255, 85, 85, 85).withOpacity(0.5),
+                color: Color.fromARGB(255, 59, 59, 59).withOpacity(0.5),
                 blurRadius: 25,
                 offset: const Offset(8, 20),
               )
@@ -42,9 +43,9 @@ class _accueilState extends State<accueil> {
           child: ClipRRect(
            borderRadius: BorderRadius.circular(10),
             child: BottomNavigationBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
             selectedItemColor: const Color(0xFFEDB602),
-            unselectedItemColor: Color.fromARGB(255, 51, 51, 51),
+            unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
             currentIndex: indexCourant,
             onTap: (index){
               setState(() {
@@ -52,9 +53,9 @@ class _accueilState extends State<accueil> {
               });
             },
             items: [
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.houseChimneyUser), label: "Accueil"),
+            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.house), label: "Accueil"),
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Paiement"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.locationDot), label: "Trajet"),
+            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route), label: "Trajet"),
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.user), label: "Profil"),
                 ],),
           ),

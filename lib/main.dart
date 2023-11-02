@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
+import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
 
 void main() {
   runApp(const TaxiTigui());
@@ -10,7 +11,10 @@ class TaxiTigui extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
+      routes: {
+        "/devenirChauffeur":(context)=> DevenirChauffeur(),
+      },
       home: accueil(),
     );
   }
