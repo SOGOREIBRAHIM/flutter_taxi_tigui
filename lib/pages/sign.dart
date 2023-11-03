@@ -87,10 +87,10 @@ class _InscriptionState extends State<Inscription> {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
-                  child: Text('CONNEXION'),
+                  child: Text('INSCRIPTION'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFEDB602),
-                    padding: EdgeInsets.fromLTRB(105, 15, 105, 15),
+                    padding: EdgeInsets.fromLTRB(92, 20, 92, 20),
                   ),
                   onPressed: () {},
                 ),

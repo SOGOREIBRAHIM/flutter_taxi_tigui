@@ -56,7 +56,7 @@ class _accueilState extends State<accueil> {
             },
             items: [
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.house), label: "Accueil"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Login"),
+            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Sign"),
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route,), label: "Trajet"),
             BottomNavigationBarItem(icon: Icon(Icons.person_2,size: 35), label: "Profil"),
                 ],),

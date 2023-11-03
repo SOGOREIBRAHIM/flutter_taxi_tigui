@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/widgets/inputSearch.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -33,13 +34,20 @@ GoogleMapController? myMapsController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       body: GoogleMap(
-       
-        onMapCreated: (GoogleMapController controller) {
-          myMapsController = controller;
-          myMapsController!.setMapStyle(_mapStyle);
-        }, initialCameraPosition: _kGooglePlex,
-      ),
+       body: Stack(
+        alignment: Alignment.bottomCenter,
+         children:[
+          GoogleMap(
+          zoomControlsEnabled: false,
+          onMapCreated: (GoogleMapController controller) {
+            myMapsController = controller;
+            myMapsController!.setMapStyle(_mapStyle);
+          }, initialCameraPosition: _kGooglePlex,
+             ),
+          InputSearch(),
+         ] 
+         
+       ),
     );
   }
 }
