@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
+import 'package:flutter_taxi_tigui/pages/annulerReservation.dart';
+import 'package:flutter_taxi_tigui/pages/apropos.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
 
 void main() {
@@ -14,6 +16,8 @@ class TaxiTigui extends StatelessWidget {
     return  MaterialApp(
       routes: {
         "/devenirChauffeur":(context)=> DevenirChauffeur(),
+        "/annulerReservation":(context)=> AnnulerReservation(),
+        "/apropos":(context)=> Apropos(),
       },
       home: accueil(),
     );

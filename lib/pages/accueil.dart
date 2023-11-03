@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:flutter_taxi_tigui/pages/paiement.dart';
 import 'package:flutter_taxi_tigui/pages/profil.dart';
+import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:flutter_taxi_tigui/pages/trajet.dart';
 import 'package:flutter_taxi_tigui/widgets/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,7 +19,7 @@ class _accueilState extends State<accueil> {
   int indexCourant = 0;
   List pages = [
     Home(),
-    Paiement(),
+    Inscription(),
     Trajet(),
     Profil(),
 
@@ -54,9 +56,9 @@ class _accueilState extends State<accueil> {
             },
             items: [
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.house), label: "Accueil"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Paiement"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route), label: "Trajet"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.user), label: "Profil"),
+            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Login"),
+            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route,), label: "Trajet"),
+            BottomNavigationBarItem(icon: Icon(Icons.person_2,size: 35), label: "Profil"),
                 ],),
           ),
         ),
