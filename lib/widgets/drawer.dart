@@ -1,49 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
-import 'package:flutter_taxi_tigui/pages/paiement.dart';
 import 'package:flutter_taxi_tigui/widgets/maps.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class DrawerS extends StatefulWidget {
+  const DrawerS({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<DrawerS> createState() => _DrawerState();
 }
 
-class _HomeState extends State<Home> {
-  int indexCourant = 0;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List pages = [
-    DevenirChauffeur(),
-  ];
-
-
+class _DrawerState extends State<DrawerS> {
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        toolbarHeight: 0.0,
-        
-      ),
-      body: Stack(
-        children: [
-            Maps(),
-            IconButton(
-              // padding: EdgeInsets.only(top: 20, left: 20),
-              onPressed: () {
-                _scaffoldKey.currentState!.openDrawer();
-              },
-              // icon: Icon(Icons.menu_sharp, color: Color(0xFFEDB602),size: 50,),
-              icon: ImageIcon(AssetImage("assets/images/1.png"),color: Color(0xFFEDB602)),
-            )
-
-        ],
-      ),
-      drawer:   Drawer(
-        child: Column(
+    return Column(
           children: [
             const DrawerHeader   (
               decoration: BoxDecoration(
@@ -130,10 +98,6 @@ class _HomeState extends State<Home> {
                 ),
                 ),
             )
-        ],)
-        ),
-      
-     
-    );
+        ],);
   }
 }
