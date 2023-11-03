@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
 import 'package:flutter_taxi_tigui/pages/paiement.dart';
+import 'package:flutter_taxi_tigui/widgets/maps.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -17,17 +18,12 @@ class _HomeState extends State<Home> {
     DevenirChauffeur(),
   ];
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      appBar: AppBar(title: Text("Google Maps")),
-      body: SingleChildScrollView(
-        child: Text("test"),
-      ),
+      appBar: AppBar(title: Text(""),),
+      body: Maps(),
       drawer:   Drawer(
         child: Column(
           children: [
