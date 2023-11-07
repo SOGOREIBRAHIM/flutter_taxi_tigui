@@ -1,40 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/pages/Details.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
-import 'package:flutter_taxi_tigui/pages/choixPaiement.dart';
 
-class Vehicule extends StatefulWidget {
-  const Vehicule({super.key});
+class ChoixPaiement extends StatefulWidget {
+  const ChoixPaiement({super.key});
 
   @override
-  State<Vehicule> createState() => _VehiculeState();
+  State<ChoixPaiement> createState() => _ChoixPaiementState();
 }
 
-class _VehiculeState extends State<Vehicule> {
+class _ChoixPaiementState extends State<ChoixPaiement> {
+
   List<int> elements = [1, 2, 3];
   int? elementSelectionne;
 
-  List imgData = [
-    "assets/images/moto-.png",
-    "assets/images/Eco.png",
-    "assets/images/HILLUX.png",
+   List imgData = [
+    "assets/images/oms.png",
+    "assets/images/money1.png",
+   
   ];
 
-  List etoile = [
-    "assets/images/moto.png",
-    "assets/images/voitureE.png",
-    "assets/images/voitureP.png",
-  ];
-
-  List<String> vehicule = [
-    "Moto",
-    "Economique",
-    "Prenium",
-  ];
-
-  List<int> prix = [
-    20000,
-    30000,
-    40000,
+  List<String> titre = [
+    "Orange Money",
+    "Espèce",
+    
   ];
 
   @override
@@ -44,11 +33,11 @@ class _VehiculeState extends State<Vehicule> {
         backgroundColor: Color(0xFFFFFFFF),
         elevation: 0,
         title: const Text(
-          "Choisissez votre destination",
+          "Mode de paiement",
           style: TextStyle(color: Color(0xFFEDB602)),
         ),
         leading: IconButton(
-           onPressed: () {
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => accueil()),
@@ -63,7 +52,7 @@ class _VehiculeState extends State<Vehicule> {
         child: Column(
           children: [
             Image(
-              image: AssetImage("assets/images/34.png"),
+              image: AssetImage("assets/images/33.png"),
               height: 300,
               width: 700,
             ),
@@ -81,14 +70,14 @@ class _VehiculeState extends State<Vehicule> {
                       child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 0.6,
-                            crossAxisSpacing: 0,
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.8,
+                            crossAxisSpacing: 1,
                             mainAxisSpacing: 0,
                           ),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 3,
+                          itemCount: 2,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
@@ -98,7 +87,7 @@ class _VehiculeState extends State<Vehicule> {
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(
-                                    top: 40, left: 10, right: 10),
+                                    top: 40, left: 20, right: 20),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
@@ -118,18 +107,12 @@ class _VehiculeState extends State<Vehicule> {
                                       imgData[index],
                                     ),
                                     Text(
-                                      vehicule[index],
+                                      titre[index],
                                       style: TextStyle(
                                         fontSize: 20,
                                       ),
                                     ),
-                                    Image.asset(etoile[index]),
-                                    Text(
-                                      prix[index].toString(),
-                                      style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    
                                   ],
                                 ),
                               ),
@@ -155,7 +138,7 @@ class _VehiculeState extends State<Vehicule> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChoixPaiement()),
+                                builder: (context) => Details()),
                           );
                         },
                       ),
