@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
+import 'package:flutter_taxi_tigui/pages/infoChauff.dart';
 import 'package:flutter_taxi_tigui/widgets/home.dart';
 
 class Details extends StatefulWidget {
@@ -75,7 +76,8 @@ class _DetailsState extends State<Details> {
                                 Column(
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(right: 105,top: 10),
+                                      padding:
+                                          EdgeInsets.only(right: 105, top: 10),
                                       child: Text(
                                         "Moto",
                                         style: TextStyle(
@@ -84,7 +86,8 @@ class _DetailsState extends State<Details> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 30),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 30),
                                       child: Text("8 minute de votre position"),
                                     ),
                                   ],
@@ -92,16 +95,19 @@ class _DetailsState extends State<Details> {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
                               child: Divider(
-                                color: Color.fromARGB(255, 119, 119, 119), // Couleur de la ligne
+                                color: Color.fromARGB(
+                                    255, 119, 119, 119), // Couleur de la ligne
                                 height:
                                     10, // Hauteur de l'espace au-dessus et au-dessous de la ligne
                                 thickness: 2, // Épaisseur de la ligne
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 12),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -112,7 +118,8 @@ class _DetailsState extends State<Details> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 12),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -123,7 +130,8 @@ class _DetailsState extends State<Details> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 12),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -178,10 +186,25 @@ Future<void> _showMyDialog(BuildContext context) async {
           child: ListBody(
             children: <Widget>[
               Image(image: AssetImage("assets/icons/valide.png")),
-              Text('Reservation effectuée !', textAlign: TextAlign.center,),
-              SizedBox(height: 10,),
-              Text('Votre code', textAlign: TextAlign.center,),
-              Text('4398', textAlign: TextAlign.center,style: TextStyle(color: Color(0xFFEDB602),fontSize: 30,fontWeight: FontWeight.bold),),
+              Text(
+                'Reservation effectuée !',
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Votre code',
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                '4398',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Color(0xFFEDB602),
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ),
@@ -189,7 +212,10 @@ Future<void> _showMyDialog(BuildContext context) async {
           TextButton(
             child: const Text('Quitter'),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => InfoChauff()),
+              );
             },
           ),
         ],

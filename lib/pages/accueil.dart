@@ -20,7 +20,7 @@ class _accueilState extends State<accueil> {
   int indexCourant = 0;
   List pages = [
     Home(),
-    Vehicule(),
+    Paiement(),
     Trajet(),
     Profil(),
 

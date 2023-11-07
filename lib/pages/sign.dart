@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Inscription extends StatefulWidget {
@@ -12,7 +13,11 @@ class _InscriptionState extends State<Inscription> {
   final _formField = GlobalKey<FormState>();
   final emailControler = TextEditingController();
   final passControler = TextEditingController();
+  final numControler = TextEditingController();
+  final nomControler = TextEditingController();
+  final prenoomControler = TextEditingController();
   bool passToggle = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +56,7 @@ class _InscriptionState extends State<Inscription> {
                           TextFormField(
                             keyboardType: TextInputType.name,
                             decoration: const InputDecoration(
-                              focusedBorder: OutlineInputBorder(
+                                focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Color(
                                           0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
@@ -65,7 +70,7 @@ class _InscriptionState extends State<Inscription> {
                           TextFormField(
                             keyboardType: TextInputType.name,
                             decoration: const InputDecoration(
-                              focusedBorder: OutlineInputBorder(
+                                focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Color(
                                           0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
@@ -79,7 +84,7 @@ class _InscriptionState extends State<Inscription> {
                           TextFormField(
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
-                              focusedBorder: OutlineInputBorder(
+                                focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Color(
                                           0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
@@ -93,7 +98,7 @@ class _InscriptionState extends State<Inscription> {
                           TextFormField(
                             keyboardType: TextInputType.name,
                             decoration: const InputDecoration(
-                              focusedBorder: OutlineInputBorder(
+                                focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Color(
                                           0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
@@ -142,25 +147,47 @@ class _InscriptionState extends State<Inscription> {
                               backgroundColor: Color(0xFFEDB602),
                               padding: EdgeInsets.fromLTRB(92, 20, 92, 20),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              // Redirection vers la page d'inscription
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Connexion()),
+                              );
+                            },
                           ),
                           SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                "Vous n’avez pas de compte ?",
-                                style: TextStyle(fontSize: 13),
-                              ),
-                              Text(
-                                "S’inscrire",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xFFEDB602),
+                          Padding(
+                            padding: EdgeInsets.only(left: 20, right: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text(
+                                  "Vous avez un compte ?",
+                                  style: TextStyle(fontSize: 13),
                                 ),
-                              ),
-                            ],
-                          )
+                                GestureDetector(
+                                  onTap: () {
+                                    // Redirection vers la page d'inscription
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Connexion()),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Se connecter",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color(0xFFEDB602),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 32),
                         ],
                       )),
                 ))
