@@ -4,6 +4,7 @@ import 'package:flutter_taxi_tigui/pages/paiement.dart';
 import 'package:flutter_taxi_tigui/pages/profil.dart';
 import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:flutter_taxi_tigui/pages/trajet.dart';
+import 'package:flutter_taxi_tigui/pages/vehicule.dart';
 import 'package:flutter_taxi_tigui/widgets/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,7 +20,7 @@ class _accueilState extends State<accueil> {
   int indexCourant = 0;
   List pages = [
     Home(),
-    Inscription(),
+    Vehicule(),
     Trajet(),
     Profil(),
 
@@ -43,7 +44,7 @@ class _accueilState extends State<accueil> {
             ]
           ),
           child: ClipRRect(
-           borderRadius: BorderRadius.circular(10),
+           borderRadius: BorderRadius.circular(50),
             child: BottomNavigationBar(
             backgroundColor: Color.fromARGB(255, 255, 255, 255),
             selectedItemColor: const Color(0xFFEDB602),
@@ -54,7 +55,7 @@ class _accueilState extends State<accueil> {
                 indexCourant = index;
               });
             },
-            items: [
+            items:  [
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.house), label: "Accueil"),
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Sign"),
             BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route,), label: "Trajet"),

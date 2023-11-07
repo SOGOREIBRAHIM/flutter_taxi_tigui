@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/pages/formAdresse.dart';
+
 
 class InputSearch extends StatefulWidget {
-  const InputSearch({super.key});
+  const InputSearch({Key? key}) : super(key: key);
 
   @override
   State<InputSearch> createState() => _InputSearchState();
 }
 
 class _InputSearchState extends State<InputSearch> {
+  
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 10,
-      left: 10,
+      right: 20,
+      left: 30,
       bottom: 10,
       child: Row(
         children: [
@@ -29,13 +35,16 @@ class _InputSearchState extends State<InputSearch> {
               ],
               color: Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(0),
-                  bottomLeft: Radius.circular(30)),
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(0),
+                bottomLeft: Radius.circular(30),
+              ),
             ),
             child: TextFormField(
+              readOnly: true,
               onTap: () {
-                PopupMenuItem(child: Text('One'));
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FormAdresse()),);
               },
               style: const TextStyle(
                 fontSize: 18,
@@ -43,25 +52,29 @@ class _InputSearchState extends State<InputSearch> {
                 color: Color.fromARGB(210, 54, 54, 54),
               ),
               decoration: const InputDecoration(
-                 border: InputBorder.none,
-                 hintText: 'Ou voulez-vous aller ?',
-                 hintStyle: TextStyle(fontSize: 20),
-                 contentPadding: EdgeInsets.all(18.0), 
+                border: InputBorder.none,
+                hintText: 'Où voulez-vous aller ?',
+                hintStyle: TextStyle(fontSize: 20),
+                contentPadding: EdgeInsets.all(18.0),
               ),
-              
-            
             ),
           ),
-          // SizedBox(width: 10),
-          Container(
+          Container (
             child: Column(
               children: [
                 ElevatedButton(
                   child: Icon(Icons.calendar_month_outlined),
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFEDB602),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 14)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                      bottomLeft: Radius.circular(0),
+                    )),
+                    backgroundColor: Color(0xFFEDB602),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  ),
                   onPressed: () {},
                 ),
               ],

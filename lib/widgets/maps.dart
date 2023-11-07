@@ -19,7 +19,7 @@ String? _mapStyle;
 void initState() {
   super.initState();
 
-  rootBundle.loadString('assets/map_style.txt').then((string) {
+  rootBundle.loadString('assets/images/map_style.txt').then((string) {
     _mapStyle = string;
   });
 }

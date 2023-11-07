@@ -30,14 +30,14 @@ class _HomeState extends State<Home> {
       // ),
       body: Stack(
         children: [
-          Maps(),
+          const Maps(),
           // InputSearch(),
           IconButton(
-            padding: EdgeInsets.only(top: 50, left: 20),
+            padding: const EdgeInsets.only(top: 50, left: 20),
             onPressed: () {
               _scaffoldKey.currentState!.openDrawer();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.menu_sharp,
               color: Color(0xFFEDB602),
               size: 50,
