@@ -8,6 +8,14 @@ class Paiement extends StatefulWidget {
 }
 
 class _PaiementState extends State<Paiement> {
+  List<String> montant = [
+    "1000",
+    "2000",
+    "3000",
+    "4000",
+    "5000",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +63,103 @@ class _PaiementState extends State<Paiement> {
                 ),
               ),
             ),
+            Column(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(2),
+                      )),
+                  child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        childAspectRatio: 0.6,
+                        crossAxisSpacing: 0,
+                        mainAxisSpacing: 0,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {});
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                top: 40, left: 10, right: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2),
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color.fromARGB(255, 136, 136, 136),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                  )
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  montant[index],
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFEDB602),),
+                                ),
+                                Text(
+                                  "FCFA",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFEDB602),),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40,left: 10),
+                  child: Row(
+                    children: [
+                      ElevatedButton(
+                        child: Icon(Icons.history,size: 24,),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(1),
+                          )),
+                          backgroundColor: Color(0xFFEDB602),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                        ),
+                        onPressed: () {},
+                      ),
+                       Container(
+                        margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                        width: 290,
+                         child: ElevatedButton(
+                          child: Text("CONFIRMER", style: TextStyle(fontSize: 22),),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(1),
+                            )),
+                            backgroundColor: Color(0xFFEDB602),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                          ),
+                          onPressed: () {},
+                                             ),
+                       ),
+                    ],
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
