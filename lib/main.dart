@@ -3,6 +3,7 @@ import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/annulerReservation.dart';
 import 'package:flutter_taxi_tigui/pages/apropos.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
+import 'package:flutter_taxi_tigui/pages/login.dart';
 
 void main() {
   runApp(const TaxiTigui());
@@ -19,7 +20,7 @@ class TaxiTigui extends StatelessWidget {
         "/annulerReservation":(context)=> AnnulerReservation(),
         "/apropos":(context)=> Apropos(),
       },
-      home: accueil(),
+      home: Connexion(),
     );
   }
 }

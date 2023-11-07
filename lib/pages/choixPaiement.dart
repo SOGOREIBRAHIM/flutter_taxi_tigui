@@ -52,7 +52,7 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
         child: Column(
           children: [
             Image(
-              image: AssetImage("assets/images/33.png"),
+              image: AssetImage("assets/images/37.png"),
               height: 300,
               width: 700,
             ),

@@ -153,10 +153,7 @@ class _DetailsState extends State<Details> {
                             minimumSize: Size(360, 20),
                             shadowColor: Color.fromARGB(255, 56, 56, 56)),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Details()),
-                          );
+                          _showMyDialog(context);
                         },
                       ),
                     ),
@@ -169,4 +166,34 @@ class _DetailsState extends State<Details> {
       ),
     );
   }
+}
+
+Future<void> _showMyDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Image(image: AssetImage("assets/icons/valide.png")),
+              Text('Reservation effectuée !', textAlign: TextAlign.center,),
+              SizedBox(height: 10,),
+              Text('Votre code', textAlign: TextAlign.center,),
+              Text('4398', textAlign: TextAlign.center,style: TextStyle(color: Color(0xFFEDB602),fontSize: 30,fontWeight: FontWeight.bold),),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Quitter'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
