@@ -24,16 +24,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      // appBar: AppBar(
-      //   toolbarHeight: 0.0,
+      appBar: AppBar(
+        toolbarHeight: 0.0,
+        backgroundColor: Color(0xFFEDB602),
 
-      // ),
+      ),
       body: Stack(
         children: [
           const Maps(),
           // InputSearch(),
           IconButton(
-            padding: const EdgeInsets.only(top: 50, left: 20),
+            // padding: const EdgeInsets.only(top: 50, left: 20),
             onPressed: () {
               _scaffoldKey.currentState!.openDrawer();
             },

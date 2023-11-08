@@ -15,6 +15,13 @@ class TaxiTigui extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      title: "TAXI TIGUI",
+      theme: ThemeData(
+        splashColor: Color(0xFFEDB602),
+        primarySwatch: Colors.amber,
+
+      ),
+      debugShowCheckedModeBanner: false,
       routes: {
         "/devenirChauffeur":(context)=> DevenirChauffeur(),
         "/annulerReservation":(context)=> AnnulerReservation(),

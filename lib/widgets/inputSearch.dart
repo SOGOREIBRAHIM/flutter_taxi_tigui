@@ -65,7 +65,7 @@ class _InputSearchState extends State<InputSearch> {
               child: Column(
                 children: [
                   ElevatedButton(
-                    child: Icon(Icons.calendar_month_outlined),
+                    child: Icon(Icons.calendar_month_outlined, color: Colors.white,),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(

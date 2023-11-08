@@ -128,7 +128,7 @@ class _PaiementState extends State<Paiement> {
                   child: Row(
                     children: [
                       ElevatedButton(
-                        child: Icon(Icons.history,size: 24,),
+                        child: Icon(Icons.history,size: 24,color: Colors.white,),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(1),
@@ -143,7 +143,7 @@ class _PaiementState extends State<Paiement> {
                         margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
                         width: 290,
                          child: ElevatedButton(
-                          child: Text("CONFIRMER", style: TextStyle(fontSize: 22),),
+                          child: Text("CONFIRMER", style: TextStyle(fontSize: 22,color: Colors.white),),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(1),

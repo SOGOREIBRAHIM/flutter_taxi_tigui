@@ -100,7 +100,7 @@ class _ConnexionState extends State<Connexion> {
                           ),
                           SizedBox(height: 40),
                           ElevatedButton(
-                            child: Text('CONNEXION'),
+                            child: Text('CONNEXION', style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFEDB602),
                               padding: EdgeInsets.fromLTRB(92, 20, 92, 20),
