@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_taxi_tigui/pages/Details.dart';
+// import 'package:flutter_taxi_tigui/pages/Details.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 
 class ChoixPaiement extends StatefulWidget {
@@ -10,20 +10,17 @@ class ChoixPaiement extends StatefulWidget {
 }
 
 class _ChoixPaiementState extends State<ChoixPaiement> {
-
   List<int> elements = [1, 2, 3];
   int? elementSelectionne;
 
-   List imgData = [
+  List imgData = [
     "assets/images/oms.png",
     "assets/images/money1.png",
-   
   ];
 
   List<String> titre = [
     "Orange Money",
     "Espèce",
-    
   ];
 
   @override
@@ -112,7 +109,6 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
                                         fontSize: 20,
                                       ),
                                     ),
-                                    
                                   ],
                                 ),
                               ),
@@ -135,11 +131,10 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
                             minimumSize: Size(360, 20),
                             shadowColor: Color.fromARGB(255, 56, 56, 56)),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Details()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => "etails() "),
+                          // );
                         },
                       ),
                     ),
