@@ -1,6 +1,10 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class Inscription extends StatefulWidget {
   const Inscription({super.key});
@@ -10,12 +14,12 @@ class Inscription extends StatefulWidget {
 }
 
 class _InscriptionState extends State<Inscription> {
-  final _formField = GlobalKey<FormState>();
   final emailControler = TextEditingController();
   final passControler = TextEditingController();
   final numControler = TextEditingController();
   final nomControler = TextEditingController();
-  final prenoomControler = TextEditingController();
+  final prenomControler = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool passToggle = true;
 
   @override
@@ -32,166 +36,241 @@ class _InscriptionState extends State<Inscription> {
             ),
           ),
         ),
-        body: Container(
+        body: SingleChildScrollView(
+          child: Container(
             decoration: BoxDecoration(
-              color: Color(0xFFEDB602),
+              color: MesCouleur().couleurPrincipal,
             ),
             child: Column(
               children: [
-                Image.asset(
-                  "assets/images/1.png",
-                  width: 340,
-                ),
-                Expanded(
-                    child: SingleChildScrollView(
+                Image.asset("assets/images/3.png"),
+                SingleChildScrollView(
                   child: Container(
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(70),
-                              topRight: Radius.circular(70))),
-                      padding: EdgeInsets.only(top: 50, left: 60, right: 60),
+                    padding: EdgeInsets.all(30),
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(70),
+                            topRight: Radius.circular(70))),
+                    child: Form(
                       child: Column(
-                        children: [
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(
-                                          0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
-                                ),
-                                labelText: "Prenom",
-                                prefixIcon: Icon(Icons.person,
-                                    color: Color(0xFFEDB602)),
-                                border: OutlineInputBorder()),
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(
-                                          0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
-                                ),
-                                labelText: "Nom",
-                                prefixIcon: Icon(Icons.person,
-                                    color: Color(0xFFEDB602)),
-                                border: OutlineInputBorder()),
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(
-                                          0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
-                                ),
-                                labelText: "Numéro",
-                                prefixIcon:
-                                    Icon(Icons.phone, color: Color(0xFFEDB602)),
-                                border: OutlineInputBorder()),
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(
-                                          0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
-                                ),
-                                labelText: "Email",
-                                prefixIcon:
-                                    Icon(Icons.email, color: Color(0xFFEDB602)),
-                                border: OutlineInputBorder()),
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            validator: (value) {},
-                            obscureText: passToggle,
-                            controller: passControler,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(
-                                          0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
-                                ),
-                                labelText: "Mot de passe",
-                                prefixIcon: Icon(
-                                  FontAwesomeIcons.lock,
-                                  color: Color(0xFFEDB602),
-                                ),
-                                suffix: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      passToggle = !passToggle;
-                                    });
-                                  },
-                                  child: Icon(
-                                    passToggle
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextFormField(
+                              keyboardType: TextInputType.name,
+                              decoration: const InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(
+                                            0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
+                                  ),
+                                  labelText: "Nom",
+                                  prefixIcon: Icon(Icons.person_2_outlined,
+                                      color: Color(0xFFEDB602)),
+                                  border: OutlineInputBorder()),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return "Nom ne peut pas etre vide !";
+                                }
+                                if (text.length < 2) {
+                                  return "Nom trop court !";
+                                }
+                                if (text.length > 60) {
+                                  return "Nom trop long, Maximuin 50 !";
+                                }
+                              },
+                              onChanged: (text) => setState(() {
+                                nomControler.text = text;
+                              }),
+                            ),
+                            SizedBox(height: 10),
+                            TextFormField(
+                              keyboardType: TextInputType.name,
+                              decoration: const InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(
+                                            0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
+                                  ),
+                                  labelText: "Prenom",
+                                  prefixIcon: Icon(Icons.person_2_outlined,
+                                      color: Color(0xFFEDB602)),
+                                  border: OutlineInputBorder()),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return "Prenom ne peut pas etre vide !";
+                                }
+                                if (text.length < 2) {
+                                  return "Prenom trop court !";
+                                }
+                                if (text.length > 60) {
+                                  return "Prenom trop long, Maximuin 50 !";
+                                }
+                              },
+                              onChanged: (text) => setState(() {
+                                prenomControler.text = text;
+                              }),
+                            ),
+                            SizedBox(height: 10),
+                            IntlPhoneField(
+                              showCountryFlag: true,
+                              dropdownIcon: Icon(
+                                Icons.arrow_drop_down,
+                                color: MesCouleur().couleurPrincipal,
+                              ),
+                              decoration: const InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(
+                                            0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
+                                  ),
+                                  border: OutlineInputBorder()),
+                              initialCountryCode: 'ML',
+                              onChanged: (text) => setState(() {
+                                numControler.text = text.completeNumber;
+                              }),
+                            ),
+                            SizedBox(height: 5),
+                            TextFormField(
+                              keyboardType: TextInputType.name,
+                              decoration: const InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(
+                                            0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
+                                  ),
+                                  labelText: "Email",
+                                  prefixIcon: Icon(Icons.email_outlined,
+                                      color: Color(0xFFEDB602)),
+                                  border: OutlineInputBorder()),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return "Email ne peut pas etre vide !";
+                                }
+                                if (EmailValidator.validate(text)) {
+                                  return null;
+                                }
+                                if (text.length < 2) {
+                                  return "Email trop court !";
+                                }
+                                if (text.length > 100) {
+                                  return "Nom trop long, Maximuin 50 !";
+                                }
+                              },
+                              onChanged: (text) => setState(() {
+                                emailControler.text = text;
+                              }),
+                            ),
+                            SizedBox(height: 10),
+                            TextFormField(
+                              inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return "Mot de passe ne peut pas etre vide !";
+                                }
+                                if (text.length < 2) {
+                                  return "Entrez mot de passe valide !";
+                                }
+                                if (text.length > 19) {
+                                  return "Mot de passe trop long, Maximuin 19 !";
+                                }
+                                return null;
+                              }, 
+                              obscureText: passToggle,
+                              controller: passControler,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(
+                                            0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
+                                  ),
+                                  labelText: "Mot de passe",
+                                  prefixIcon: Icon(
+                                    Icons.lock_outline,
                                     color: Color(0xFFEDB602),
                                   ),
-                                ),
-                                border: OutlineInputBorder()),
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            child: Text('INSCRIPTION'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFEDB602),
-                              padding: EdgeInsets.fromLTRB(92, 20, 92, 20),
-                            ),
-                            onPressed: () {
-                              // Redirection vers la page d'inscription
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Connexion()),
-                              );
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text(
-                                  "Vous avez un compte ?",
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Redirection vers la page d'inscription
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Connexion()),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Se connecter",
-                                    style: TextStyle(
-                                      fontSize: 15,
+                                  suffix: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        passToggle = !passToggle;
+                                      });
+                                    },
+                                    child: Icon(
+                                      passToggle
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
                                       color: Color(0xFFEDB602),
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  border: OutlineInputBorder()),
+                                
+
                             ),
-                          ),
-                          SizedBox(height: 32),
-                        ],
-                      )),
-                ))
+
+                            TextFormField(
+                              inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return "Confirmer mot de passe ne peut pas etre vide !";
+                                }
+                                if (text.length < 2) {
+                                  return "Entrez mot de passe valide !";
+                                }
+                                if (text.length > 19) {
+                                  return "Mot de passe trop long, Maximuin 19 !";
+                                }
+                                return null;
+                              }, 
+                              obscureText: passToggle,
+                              controller: passControler,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(
+                                            0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
+                                  ),
+                                  labelText: "Mot de passe",
+                                  prefixIcon: Icon(
+                                    Icons.lock_outline,
+                                    color: Color(0xFFEDB602),
+                                  ),
+                                  suffix: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        passToggle = !passToggle;
+                                      });
+                                    },
+                                    child: Icon(
+                                      passToggle
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Color(0xFFEDB602),
+                                    ),
+                                  ),
+                                  border: OutlineInputBorder()),
+                                
+
+                            ),
+                          ]),
+                    ),
+                  ),
+                ),
               ],
-            )));
+            ),
+          ),
+        ));
   }
 }
