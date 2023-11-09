@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/infoChauff.dart';
 import 'package:flutter_taxi_tigui/widgets/home.dart';
@@ -47,7 +48,7 @@ class _DetailsState extends State<Details> {
                   children: [
                     Container(
                       decoration: const BoxDecoration(
-                          color: Color(0xFFEBEBEB),
+                          color: Color(0xFFEDB602),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(50),
                             topRight: Radius.circular(50),

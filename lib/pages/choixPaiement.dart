@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_taxi_tigui/pages/Details.dart';
+import 'package:flutter_taxi_tigui/pages/Details.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 
 class ChoixPaiement extends StatefulWidget {
@@ -131,10 +131,10 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
                             minimumSize: Size(360, 20),
                             shadowColor: Color.fromARGB(255, 56, 56, 56)),
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => "etails() "),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Details()),
+                          );
                         },
                       ),
                     ),

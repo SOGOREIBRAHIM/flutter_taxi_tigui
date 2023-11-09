@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,7 +50,7 @@ class _ConnexionState extends State<Connexion> {
                               topLeft: Radius.circular(70),
                               topRight: Radius.circular(70))),
                       padding:
-                          const EdgeInsets.only(top: 50, left: 60, right: 60),
+                          const EdgeInsets.only(top: 50, left: 30, right: 30),
                       child: Column(
                         children: [
                           SizedBox(height: 8),
@@ -100,10 +101,10 @@ class _ConnexionState extends State<Connexion> {
                           ),
                           SizedBox(height: 40),
                           ElevatedButton(
-                            child: Text('CONNEXION', style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
+                            child: Text('CONNEXION', style: TextStyle(color: MesCouleur().couleurTexteBouton,fontSize: 16,fontWeight: FontWeight.bold),),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFEDB602),
-                              padding: EdgeInsets.fromLTRB(92, 20, 92, 20),
+                              padding: EdgeInsets.only(top: 15, left: 115, right: 115, bottom: 15)
                             ),
                             onPressed: () {
                               Navigator.push(
