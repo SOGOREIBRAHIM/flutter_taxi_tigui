@@ -1,7 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
+import 'package:flutter_taxi_tigui/global/global.dart';
+import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:flutter_taxi_tigui/pages/sign.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PasswordForget extends StatefulWidget {
   const PasswordForget({super.key});
@@ -13,6 +16,18 @@ class PasswordForget extends StatefulWidget {
 class _PasswordForgetState extends State<PasswordForget> {
 
   final emailControler = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  void _submit(){
+    firebaseAuth.sendPasswordResetEmail(email: emailControler.text.trim()
+    ).then((value) {
+      Fluttertoast.showToast(msg: "nous vous avons envoyé un e-mail pour récupérer, veuillez vérifier vos e-mails");
+    }).onError((error, stackTrace) {
+      Fluttertoast.showToast(msg: "erreur est survenue");
+    });
+
+
+  }
 
 
   @override
@@ -53,7 +68,7 @@ class _PasswordForgetState extends State<PasswordForget> {
                           children: [
                             SizedBox(height: 50,),
                             Form(
-                              // key: _formKey,
+                              key: _formKey,
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -98,12 +113,12 @@ class _PasswordForgetState extends State<PasswordForget> {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          // _submit();
+                                          _submit();
                                         },
                                         child: Text(
-                                          'S\'inscrire',
+                                          'Lien de réinitialisation envoyé',
                                           style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 17,
                                             color: Color.fromARGB(255, 255, 255, 255),
                                           ),
                                         ),
@@ -127,37 +142,34 @@ class _PasswordForgetState extends State<PasswordForget> {
                           ),
 
                             SizedBox(height: 20),
-                             Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text(
-                                  "Vous n'avez pas de compte ?",
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Redirection vers la page d'inscription
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Inscription()),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "S'inscrire'",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xFFEDB602),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 65,)
-                              ],
-                            ),
-                          ),
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceAround,
+                               children: [
+                                 const Text(
+                                   "Vous avez déjà un compte ?",
+                                   style: TextStyle(fontSize: 13),
+                                 ),
+                                 GestureDetector(
+                                   onTap: () {
+                                     // Redirection vers la page d'inscription
+                                     Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                           builder: (context) => Connexion()),
+                                     );
+                                   },
+                                   child: const Text(
+                                     "Se connecter",
+                                     style: TextStyle(
+                                       fontSize: 15,
+                                       color: Color(0xFFEDB602),
+                                       fontWeight: FontWeight.bold,
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 65,)
+                               ],
+                             ),
                           ],
                         ),
                       ),

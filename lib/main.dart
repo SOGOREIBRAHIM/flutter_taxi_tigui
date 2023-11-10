@@ -7,6 +7,7 @@ import 'package:flutter_taxi_tigui/pages/apropos.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_taxi_tigui/splashScrum/splashScrum.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -35,7 +36,7 @@ class TaxiTigui extends StatelessWidget {
         "/annulerReservation": (context) => AnnulerReservation(),
         "/apropos": (context) => Apropos(),
       },
-      home: Connexion(),
+      home: Slapsh(),
     );
   }
 }
