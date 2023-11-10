@@ -1,49 +1,18 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
-import 'package:flutter_taxi_tigui/global/global.dart';
-import 'package:flutter_taxi_tigui/pages/accueil.dart';
-import 'package:flutter_taxi_tigui/pages/passwordForget.dart';
 import 'package:flutter_taxi_tigui/pages/sign.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Connexion extends StatefulWidget {
-  const Connexion({super.key});
+class PasswordForget extends StatefulWidget {
+  const PasswordForget({super.key});
 
   @override
-  State<Connexion> createState() => _ConnexionState();
+  State<PasswordForget> createState() => _PasswordForgetState();
 }
 
-class _ConnexionState extends State<Connexion> {
+class _PasswordForgetState extends State<PasswordForget> {
 
-  void _submit() async {
-    if (_formKey.currentState!.validate()) {
-      await firebaseAuth
-          .signInWithEmailAndPassword(
-              email: emailControler.text.trim(),
-              password: passControler.text.trim())
-          .then((auth) async {
-        currentUser = auth.user;
-       
-        await Fluttertoast.showToast(msg: "Connexion reussit");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (index) => accueil()));
-      }).catchError((errorMessage){
-        Fluttertoast.showToast(msg: "Inscription echoué \n $errorMessage");
-      });
-    }
-    else{
-      Fluttertoast.showToast(msg: "Tous les champs ne sont pas remplis");
-    }
-  }
-
-  
   final emailControler = TextEditingController();
-  final passControler = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  bool passToggle = true;
 
 
   @override
@@ -74,7 +43,7 @@ class _ConnexionState extends State<Connexion> {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(30),
+                        padding: EdgeInsets.all(50),
                         decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.only(
@@ -84,7 +53,7 @@ class _ConnexionState extends State<Connexion> {
                           children: [
                             SizedBox(height: 50,),
                             Form(
-                              key: _formKey,
+                              // key: _formKey,
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -122,63 +91,14 @@ class _ConnexionState extends State<Connexion> {
                                       }),
                                     ),
                                     SizedBox(height: 10),
-                                    TextFormField(
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(20)
-                                      ],
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      validator: (text) {
-                                        if (text == null || text.isEmpty) {
-                                          return "Mot de passe ne peut pas etre vide !";
-                                        }
-                                        if (text.length < 5) {
-                                          return "Entrez mot de passe valide !";
-                                        }
-                                        if (text.length > 19) {
-                                          return "Mot de passe trop long, Maximuin 19 !";
-                                        }
-                                        return null;
-                                      },
-                                      obscureText: passToggle,
-                                      controller: passControler,
-                                      keyboardType: TextInputType.name,
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Color(
-                                                    0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
-                                          ),
-                                          labelText: "Mot de passe",
-                                          prefixIcon: Icon(
-                                            Icons.lock_outline,
-                                            color: Color(0xFFEDB602),
-                                          ),
-                                          suffix: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                passToggle = !passToggle;
-                                              });
-                                            },
-                                            child: Icon(
-                                              passToggle
-                                                  ? Icons.visibility
-                                                  : Icons.visibility_off,
-                                              color: Color(0xFFEDB602),
-                                            ),
-                                          ),
-                                          border: OutlineInputBorder()),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
+                                    
                                     Container(
                                       padding: EdgeInsets.only(top: 10),
                                       width: 350,
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          _submit();
+                                          // _submit();
                                         },
                                         child: Text(
                                           'S\'inscrire',
@@ -191,24 +111,7 @@ class _ConnexionState extends State<Connexion> {
                                     ),
 
                                     SizedBox(height: 20,),
-                                    GestureDetector(
-                                  onTap: () {
-                                    // Redirection vers la page d'inscription
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => PasswordForget() ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Mot de passe oublié",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xFFEDB602),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                                    
                                   ]),
                             ),
 
@@ -251,7 +154,7 @@ class _ConnexionState extends State<Connexion> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 35,)
+                                SizedBox(height: 65,)
                               ],
                             ),
                           ),
