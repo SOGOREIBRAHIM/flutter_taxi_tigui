@@ -1,7 +1,9 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
+import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -14,13 +16,42 @@ class Inscription extends StatefulWidget {
 }
 
 class _InscriptionState extends State<Inscription> {
+  // fonction de verification et enregistrement
+  void _submit() async {
+    if (_formKey.currentState!.validate()) {
+      await firebaseAuth
+          .createUserWithEmailAndPassword(
+              email: emailControler.text.trim(),
+              password: passControler.text.trim())
+          .then((auth) async {
+        currentUser = auth.user;
+        if (currentUser != null) {
+          Map userMap = {
+            "id": currentUser!.uid,
+            "nom": nomControler.text.trim(),
+            "prenom": prenomControler.text.trim(),
+            "numero": numControler.text.trim(),
+            "email": emailControler.text.trim(),
+            "mot de passe": passControler.text.trim(),
+            "confirmer": confirmerPassControler.text.trim(),
+          };
+          DatabaseReference userRef =
+              FirebaseDatabase.instance.ref().child("users");
+          userRef.child(currentUser!.uid).set(userMap);
+        }
+      });
+    }
+  }
+
   final emailControler = TextEditingController();
   final passControler = TextEditingController();
+  final confirmerPassControler = TextEditingController();
   final numControler = TextEditingController();
   final nomControler = TextEditingController();
   final prenomControler = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool passToggle = true;
+  bool confirmPassToggle = true;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +84,7 @@ class _InscriptionState extends State<Inscription> {
                             topLeft: Radius.circular(70),
                             topRight: Radius.circular(70))),
                     child: Form(
+                      key: _formKey,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +111,7 @@ class _InscriptionState extends State<Inscription> {
                                   return "Nom trop court !";
                                 }
                                 if (text.length > 60) {
-                                  return "Nom trop long, Maximuin 50 !";
+                                  return "Nom trop long, Maximuin 30 !";
                                 }
                               },
                               onChanged: (text) => setState(() {
@@ -109,7 +141,7 @@ class _InscriptionState extends State<Inscription> {
                                   return "Prenom trop court !";
                                 }
                                 if (text.length > 60) {
-                                  return "Prenom trop long, Maximuin 50 !";
+                                  return "Prenom trop long, Maximuin 30 !";
                                 }
                               },
                               onChanged: (text) => setState(() {
@@ -170,21 +202,23 @@ class _InscriptionState extends State<Inscription> {
                             ),
                             SizedBox(height: 10),
                             TextFormField(
-                              inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(20)
+                              ],
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               validator: (text) {
                                 if (text == null || text.isEmpty) {
                                   return "Mot de passe ne peut pas etre vide !";
                                 }
-                                if (text.length < 2) {
+                                if (text.length < 5) {
                                   return "Entrez mot de passe valide !";
                                 }
                                 if (text.length > 19) {
                                   return "Mot de passe trop long, Maximuin 19 !";
                                 }
                                 return null;
-                              }, 
+                              },
                               obscureText: passToggle,
                               controller: passControler,
                               keyboardType: TextInputType.name,
@@ -213,28 +247,33 @@ class _InscriptionState extends State<Inscription> {
                                     ),
                                   ),
                                   border: OutlineInputBorder()),
-                                
-
                             ),
-
+                            SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
-                              inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(20)
+                              ],
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               validator: (text) {
                                 if (text == null || text.isEmpty) {
                                   return "Confirmer mot de passe ne peut pas etre vide !";
                                 }
-                                if (text.length < 2) {
+                                if (text.length < 5) {
                                   return "Entrez mot de passe valide !";
                                 }
+                                if (text != passControler.text) {
+                                  return "Mot de passe incorrect !";
+                                }
                                 if (text.length > 19) {
-                                  return "Mot de passe trop long, Maximuin 19 !";
+                                  return "Confirmer Mot de passe trop long, Maximuin 19 !";
                                 }
                                 return null;
-                              }, 
-                              obscureText: passToggle,
-                              controller: passControler,
+                              },
+                              obscureText: confirmPassToggle,
+                              controller: confirmerPassControler,
                               keyboardType: TextInputType.name,
                               decoration: InputDecoration(
                                   focusedBorder: OutlineInputBorder(
@@ -242,7 +281,7 @@ class _InscriptionState extends State<Inscription> {
                                         color: Color(
                                             0xFFEDB602)), // Couleur de la bordure lorsqu'elle est désactivée
                                   ),
-                                  labelText: "Mot de passe",
+                                  labelText: "Confirmer ",
                                   prefixIcon: Icon(
                                     Icons.lock_outline,
                                     color: Color(0xFFEDB602),
@@ -250,7 +289,7 @@ class _InscriptionState extends State<Inscription> {
                                   suffix: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        passToggle = !passToggle;
+                                        confirmPassToggle = !confirmPassToggle;
                                       });
                                     },
                                     child: Icon(
@@ -261,9 +300,24 @@ class _InscriptionState extends State<Inscription> {
                                     ),
                                   ),
                                   border: OutlineInputBorder()),
-                                
-
                             ),
+                            Container(
+                              padding: EdgeInsets.only(top: 10),
+                              width: 350,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _submit();
+                                },
+                                child: Text(
+                                  'S\'inscrire',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                ),
+                              ),
+                            )
                           ]),
                     ),
                   ),

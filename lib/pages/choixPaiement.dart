@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_taxi_tigui/pages/Details.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
+import 'package:flutter_taxi_tigui/pages/infoChauff.dart';
 
 class ChoixPaiement extends StatefulWidget {
   const ChoixPaiement({super.key});
@@ -133,7 +133,8 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Details()),
+                            MaterialPageRoute(
+                                builder: (context) => InfoChauff()),
                           );
                         },
                       ),
