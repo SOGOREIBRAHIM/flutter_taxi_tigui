@@ -42,10 +42,11 @@ class _MapsState extends State<Maps> {
   LocationPermission? _locationPermission;
   
   List<LatLng> pLineCoordinatedList = [];
+  Set<Polyline> polylineSet = {};
 
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
-  Set<Polyline> polylinesSet = {};
+
 
   
   
@@ -113,14 +114,14 @@ class _MapsState extends State<Maps> {
             children: [
               GoogleMap(
                 mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
-                zoomControlsEnabled: true,
-                zoomGesturesEnabled: true,
                 myLocationEnabled: true,
-                polylines: polylinesSet,
+                zoomControlsEnabled: false,
+                zoomGesturesEnabled: true,
+                initialCameraPosition: _kGooglePlex,
+                polylines: polylineSet,
                 markers: markersSet,
                 circles: circlesSet,
-                onMapCreated: (GoogleMapController controller) async {
+                onMapCreated: (GoogleMapController controller){
                   _googleMapController.complete(controller);
                   newGoogleMapController = controller;
 

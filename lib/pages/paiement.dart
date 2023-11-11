@@ -26,7 +26,7 @@ class _PaiementState extends State<Paiement> {
         elevation: 0,
         title: const Text(
           "Paiement",
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255),fontWeight: FontWeight.bold,fontSize: 25),
         ),
       ),
       body: SingleChildScrollView(
