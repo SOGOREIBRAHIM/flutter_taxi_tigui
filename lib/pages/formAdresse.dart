@@ -3,8 +3,7 @@ import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/vehicule.dart';
 import 'package:flutter_taxi_tigui/widgets/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
-import 'package:flutter_google_places_hoc081098/google_maps_webservice_places.dart';
+
 
 class FormAdresse extends StatefulWidget {
   const FormAdresse({super.key});
@@ -14,27 +13,27 @@ class FormAdresse extends StatefulWidget {
 }
 
 class _FormAdresseState extends State<FormAdresse> {
-  Future<String> showGoogleAutoCompl() async {
-    const apiKey = "AIzaSyDDGtmVxuMl8rMOacYgbdEfghp2xpOeYQg";
+  // Future<String> showGoogleAutoCompl() async {
+  //   const apiKey = "AIzaSyDDGtmVxuMl8rMOacYgbdEfghp2xpOeYQg";
 
-    Prediction? p = await PlacesAutocomplete.show(
-      context: context,
-      apiKey: apiKey,
-      mode: Mode.overlay,
-      language: "fr",
-      region: "ML",
-      components: [Component(Component.country, "ML")],
-      types: ["(cities)"],
-      hint: "Chercher une adresse",
-    );
+    // Prediction? p = await PlacesAutocomplete.show(
+    //   context: context,
+    //   apiKey: apiKey,
+    //   mode: Mode.overlay,
+    //   language: "fr",
+    //   region: "ML",
+    //   components: [Component(Component.country, "ML")],
+    //   types: ["(cities)"],
+    //   hint: "Chercher une adresse",
+    // );
 
-    if (p != null) {
-      // Faites quelque chose avec la prédiction
-      print(p.description);
-    }
+  //   if (p != null) {
+  //     // Faites quelque chose avec la prédiction
+  //     print(p.description);
+  //   }
 
-    return p!.description!;
-  }
+  //   return p!.description!;
+  // }
 
   TextEditingController departController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
@@ -81,11 +80,11 @@ class _FormAdresseState extends State<FormAdresse> {
                 controller: departController,
                 onTap: () async {
                   // recuperer l'adresse selectionner
-                  String selectedPlace = await showGoogleAutoCompl();
-                  departController.text = selectedPlace;
-                  setState(() {
-                    showSourceField = true;
-                  });
+                  // String selectedPlace = await showGoogleAutoCompl();
+                  // departController.text = selectedPlace;
+                  // setState(() {
+                  //   showSourceField = true;
+                  // });
                 },
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -104,12 +103,12 @@ class _FormAdresseState extends State<FormAdresse> {
                 controller: destinationController,
                 onTap: () async {
                   // recuperer l'adresse selectionner
-                  String selectedPlace = await showGoogleAutoCompl();
-                  destinationController.text = selectedPlace;
-                  setState(() {
-                    showSourceField2 = true;
-                  });
-                  goVehicule();
+                  // String selectedPlace = await showGoogleAutoCompl();
+                  // destinationController.text = selectedPlace;
+                  // setState(() {
+                  //   showSourceField2 = true;
+                  // });
+                  // goVehicule();
                 },
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),

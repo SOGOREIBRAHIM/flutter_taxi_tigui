@@ -36,11 +36,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.6.0
-  google_fonts: ^6.1.0
   google_maps_flutter: ^2.5.0
-  flutter_google_maps_webservices: ^1.1.1
   google_places_flutter: ^2.0.6
-  flutter_google_places_hoc081098: ^2.0.0-beta.1
   flutter_native_splash: ^2.3.5
   firebase_core: ^2.21.0
   firebase_auth: ^4.12.1
@@ -51,7 +48,11 @@ dependencies:
   fluttertoast: ^8.2.3
   geolocator: ^10.1.0
   flutter_geofire: ^2.0.3
-  flutter_polyline_points: ^2.0.0
+  flutter_polyline_points: ^1.0.0
+  geocoder2: ^1.4.0
+  location: ^5.0.3
+
+
 
 dev_dependencies:
   flutter_test:

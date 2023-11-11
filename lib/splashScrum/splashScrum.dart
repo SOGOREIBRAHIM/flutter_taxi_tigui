@@ -24,7 +24,7 @@ class _SlapshState extends State<Slapsh> {
         Navigator.push(context, MaterialPageRoute(builder: ((context) => Connexion())));
       }
       else{
-        Navigator.push(context, MaterialPageRoute(builder: ((context) => Inscription())));
+        Navigator.push(context, MaterialPageRoute(builder: ((context) => Connexion())));
       }
     });
   }

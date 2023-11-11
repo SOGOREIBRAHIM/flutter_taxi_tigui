@@ -1,7 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
+import 'package:flutter_taxi_tigui/pages/APIkey.dart';
+import 'package:geocoder2/geocoder2.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter_taxi_tigui/widgets/inputSearch.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:location/location.dart' as loc;
+
 
 class Maps extends StatefulWidget {
   const Maps({super.key});
@@ -12,42 +19,134 @@ class Maps extends StatefulWidget {
 
 class _MapsState extends State<Maps> {
 
+  final Completer<GoogleMapController> _googleMapController = Completer();
+  GoogleMapController? newGoogleMapController;
 
-String? _mapStyle;
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(12.6120094, -8.0146979),
+    zoom: 15,
+  );
 
-@override
-void initState() {
-  super.initState();
+  LatLng? pickLocation;
+  loc.Location location = loc.Location();
+  String? _adress;
 
-  rootBundle.loadString('assets/images/map_style.txt').then((string) {
-    _mapStyle = string;
-  });
-}
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
+  
 
-static const CameraPosition _kGooglePlex = CameraPosition(
-  target: LatLng(12.6312102,-8.0327274),
-  zoom: 14.4746,
-);
+  Position? userCurrentPosition;
+  
 
-GoogleMapController? myMapsController;
+  var geoLocation = Geolocator();
+
+  LocationPermission? _locationPermission;
+  
+  List<LatLng> pLineCoordinatedList = [];
+
+  Set<Marker> markersSet = {};
+  Set<Circle> circlesSet = {};
+  Set<Polyline> polylinesSet = {};
+
+  
+  
+
+  locateUserPosition() async{
+
+    Position cPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high); 
+
+    userCurrentPosition = cPosition;
+    
+    LatLng latLngPosition = LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
+    print(latLngPosition);
+
+    CameraPosition cameraPosition = CameraPosition(target: latLngPosition, zoom: 15);
+    
+    newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    
+    String humanReadableAdress = await AssistanceMethode.searchAddressForGeographieCoordonnee(userCurrentPosition!, context);
+    print("ddddddddddddddddd&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+humanReadableAdress);
+    
+    
+  }
+
+  getAddressFromLagLng() async{
+    try {
+      GeoData data = await Geocoder2.getDataFromCoordinates(
+        latitude: pickLocation!.latitude, 
+        longitude: pickLocation!.longitude,
+        googleMapApiKey: apiKey);
+        setState(() {
+          _adress = data.address;
+        });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+
+
+  checkLocationPermission() async{
+    _locationPermission = await Geolocator.requestPermission();
+
+    if (_locationPermission == LocationPermission.denied) {
+      _locationPermission = await Geolocator.requestPermission();
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLocationPermission;
+  }
+ 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-       body: Stack(
-        alignment: Alignment.bottomCenter,
-         children:[
-          GoogleMap(
-          zoomControlsEnabled: false,
-          onMapCreated: (GoogleMapController controller) {
-            myMapsController = controller;
-            myMapsController!.setMapStyle(_mapStyle);
-          }, initialCameraPosition: _kGooglePlex,
-             ),
-          InputSearch(),
-         ] 
-         
-       ),
-    );
+    return  GestureDetector(
+         onTap: (){
+          FocusScope.of(context).unfocus();
+         },
+         child: Scaffold(
+          body: Stack(
+            children: [
+              GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _kGooglePlex,
+                zoomControlsEnabled: true,
+                zoomGesturesEnabled: true,
+                myLocationEnabled: true,
+                polylines: polylinesSet,
+                markers: markersSet,
+                circles: circlesSet,
+                onMapCreated: (GoogleMapController controller) async {
+                  _googleMapController.complete(controller);
+                  newGoogleMapController = controller;
+
+                 setState(() {
+                   
+                 });
+
+                 locateUserPosition();
+                  
+                },
+                onCameraMove: (CameraPosition? position){
+                  if (pickLocation != position!.target ) {
+                    setState(() {
+                      pickLocation = position.target;
+                    });
+                  }
+                },
+                onCameraIdle: (){
+                  getAddressFromLagLng();
+                },
+              ),
+              InputSearch(),
+            ],
+          ),
+         ),
+       );
   }
 }
+
