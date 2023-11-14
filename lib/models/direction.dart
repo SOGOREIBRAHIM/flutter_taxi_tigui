@@ -2,8 +2,8 @@ class Direction {
   String? humanReadableAdress;
   String? locationName;
   String? locationId;
-  String? locationLong;
-  String? locationLag;
+  double? locationLong;
+  double? locationLag;
   Direction({
     this.humanReadableAdress,
     this.locationId,

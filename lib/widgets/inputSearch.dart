@@ -44,9 +44,14 @@ class _InputSearchState extends State<InputSearch> {
               ),
               child: TextFormField(
                 readOnly: true,
-                onTap: () {
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => FormAdresse()),);
+                onTap: () async {
+                  var resonseAutoCompleteSearch = await Navigator.push(context, MaterialPageRoute(builder: (c)=>FormAdresse()));
+
+                  if (resonseAutoCompleteSearch == "obtainedDropoff") {
+                    setState(() {
+                      // openNavigationDrawer = false;
+                    });
+                  }
                 },
                 style: const TextStyle(
                   fontSize: 18,

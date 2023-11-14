@@ -18,7 +18,7 @@ class Slapsh extends StatefulWidget {
 class _SlapshState extends State<Slapsh> {
 
   startTime(){
-    Timer(Duration(seconds:10), () async {
+    Timer(Duration(seconds:5), () async {
       if (await firebaseAuth.currentUser != null) {
         firebaseAuth.currentUser != null ? AssistanceMethode.readCurrentOnlineInfo() : null;
         Navigator.push(context, MaterialPageRoute(builder: ((context) => Connexion())));

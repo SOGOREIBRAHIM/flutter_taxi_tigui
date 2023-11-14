@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
+import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
+import 'package:flutter_taxi_tigui/global/global.dart';
+import 'package:flutter_taxi_tigui/infoHandler/app_info.dart';
+import 'package:flutter_taxi_tigui/models/direction.dart';
 import 'package:flutter_taxi_tigui/pages/APIkey.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,6 +13,7 @@ import 'package:flutter_taxi_tigui/widgets/inputSearch.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
+import 'package:provider/provider.dart';
 
 
 class Maps extends StatefulWidget {
@@ -29,12 +35,15 @@ class _MapsState extends State<Maps> {
 
   LatLng? pickLocation;
   loc.Location location = loc.Location();
-  String? _adress;
+  String? _address;
 
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   
 
   Position? userCurrentPosition;
+
+  String userName = "";
+  String userEmail = "";
   
 
   var geoLocation = Geolocator();
@@ -46,8 +55,6 @@ class _MapsState extends State<Maps> {
 
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
-
-
   
   
 
@@ -58,15 +65,21 @@ class _MapsState extends State<Maps> {
     userCurrentPosition = cPosition;
     
     LatLng latLngPosition = LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
-    print(latLngPosition);
 
     CameraPosition cameraPosition = CameraPosition(target: latLngPosition, zoom: 15);
     
     newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     
     String humanReadableAdress = await AssistanceMethode.searchAddressForGeographieCoordonnee(userCurrentPosition!, context);
-    print("ddddddddddddddddd&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+humanReadableAdress);
+    print("votre adresse: "+ humanReadableAdress);
+
+    userName = userModelCurrentInfo!.nom!;
+    userEmail = userModelCurrentInfo!.email!;
     
+
+    // initializeGeoFireListener();
+
+    // AssistanceMethode.readCurrentOnlineInfo(context);
     
   }
 
@@ -76,8 +89,18 @@ class _MapsState extends State<Maps> {
         latitude: pickLocation!.latitude, 
         longitude: pickLocation!.longitude,
         googleMapApiKey: apiKey);
+        
         setState(() {
-          _adress = data.address;
+          Direction userPickUpAddress = Direction();
+          userPickUpAddress.locationLag = pickLocation!.latitude;
+          userPickUpAddress.locationLong = pickLocation!.longitude;
+          userPickUpAddress.locationName = data.address;
+          // _address = data.address;
+          // print("Recuperer adresse =>#################################################################");
+          //  print(locationName);
+          // print(_address);
+          Provider.of<AppInfo>(context, listen: false).updatePickupLocationAdress(userPickUpAddress);
+
         });
     } catch (e) {
       print(e);
@@ -85,9 +108,7 @@ class _MapsState extends State<Maps> {
   }
 
 
-
-
-  checkLocationPermission() async{
+  checkLocationPermissionAlowed() async{
     _locationPermission = await Geolocator.requestPermission();
 
     if (_locationPermission == LocationPermission.denied) {
@@ -99,7 +120,7 @@ class _MapsState extends State<Maps> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkLocationPermission;
+    checkLocationPermissionAlowed();
   }
  
 
@@ -142,7 +163,39 @@ class _MapsState extends State<Maps> {
                 onCameraIdle: (){
                   getAddressFromLagLng();
                 },
+                
               ),
+              Align(
+                alignment: Alignment.center,
+               child: Padding(
+                padding: EdgeInsets.only(bottom: 35),
+                child: Icon(
+                  Icons.location_on_outlined,
+                  color: MesCouleur().couleurPrincipal,
+                  size: 40,
+                ),
+                ),
+              ),
+            Positioned(
+              top: 40,
+              right: 20,
+              left: 20,
+                child: Container(
+              decoration:
+                  BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.white
+                  ),
+                  padding: EdgeInsets.all(20),
+                child: Text(
+                  Provider.of<AppInfo>(context).userPickeUpLocation !=null
+                  ? Provider.of<AppInfo>(context).userPickeUpLocation!.locationName!
+                  : "Address",
+                  overflow: TextOverflow.visible, softWrap: true,
+                ),
+              ),
+            ),
+              
               InputSearch(),
             ],
           ),
