@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
-import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PasswordForget extends StatefulWidget {

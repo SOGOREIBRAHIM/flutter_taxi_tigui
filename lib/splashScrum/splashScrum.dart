@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
-import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
-import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
-import 'package:flutter_taxi_tigui/pages/sign.dart';
 
 class Slapsh extends StatefulWidget {
   const Slapsh({super.key});

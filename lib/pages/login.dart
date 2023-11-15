@@ -5,9 +5,7 @@ import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/passwordForget.dart';
-import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Connexion extends StatefulWidget {
   const Connexion({super.key});
@@ -115,6 +113,7 @@ class _ConnexionState extends State<Connexion> {
                                       if (text.length > 100) {
                                         return "Nom trop long, Maximuin 50 !";
                                       }
+                                      // return null;
                                     },
                                     onChanged: (text) => setState(() {
                                       emailControler.text = text;

@@ -3,8 +3,6 @@ import 'package:flutter_taxi_tigui/assistance/requsetAssistant.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/models/predictionPlace.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
-import 'package:flutter_taxi_tigui/pages/vehicule.dart';
-import 'package:flutter_taxi_tigui/widgets/home.dart';
 import 'package:flutter_taxi_tigui/widgets/predictionPlaceDesign.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

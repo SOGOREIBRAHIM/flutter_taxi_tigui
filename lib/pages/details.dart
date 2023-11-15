@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/infoChauff.dart';
-import 'package:flutter_taxi_tigui/widgets/home.dart';
 
 class Details extends StatefulWidget {
   const Details({super.key});

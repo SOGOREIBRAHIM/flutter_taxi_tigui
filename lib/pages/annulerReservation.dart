@@ -97,7 +97,7 @@ class _AnnulerReservationState extends State<AnnulerReservation> {
                               ),
                               SizedBox(height: 20),
                               TextFormField(
-                                validator: (value) {},
+                                // validator: (value) {},
                                 // obscureText: passToggle,
                                 // controller: passControler,
                                 keyboardType: TextInputType.name,

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:flutter_taxi_tigui/pages/paiement.dart';
 import 'package:flutter_taxi_tigui/pages/profil.dart';
-import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:flutter_taxi_tigui/pages/trajet.dart';
-import 'package:flutter_taxi_tigui/pages/vehicule.dart';
 import 'package:flutter_taxi_tigui/widgets/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profil extends StatefulWidget {
   const Profil({super.key});

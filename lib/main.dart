@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/infoHandler/app_info.dart';
-import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/annulerReservation.dart';
 import 'package:flutter_taxi_tigui/pages/apropos.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
-import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_taxi_tigui/splashScrum/splashScrum.dart';
 import 'package:provider/provider.dart';
