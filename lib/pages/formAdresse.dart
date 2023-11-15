@@ -18,12 +18,12 @@ class FormAdresse extends StatefulWidget {
 
 class _FormAdresseState extends State<FormAdresse> {
 
-  // TextEditingController departController = TextEditingController();
-  // TextEditingController destinationController = TextEditingController();
+  TextEditingController departController = TextEditingController();
+  TextEditingController destinationController = TextEditingController();
 
-  // // etat du champs
-  // bool showSourceField = false;
-  // bool showSourceField2 = false;
+  // etat du champs
+  bool showSourceField = false;
+  bool showSourceField2 = false;
 
   // void goVehicule(){
   //   if(departController.text.isNotEmpty && destinationController.text.isNotEmpty){
@@ -40,7 +40,7 @@ class _FormAdresseState extends State<FormAdresse> {
        
        var responseAutoCompleteSearch = await RequsetAssistant.receiveRequest(urlAutoCompleteSearch);
        
-       if (responseAutoCompleteSearch == "Error Occured. Failed. No Response.") {
+       if (responseAutoCompleteSearch == "Error Occured. Failed. No Response") {
          return;
        }
 
@@ -85,28 +85,11 @@ class _FormAdresseState extends State<FormAdresse> {
           child: Align(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-                  child: TextFormField(
-                    // controller: destinationController,
-                    onChanged: (value) {
-                      print(value);
-                      debugPrint(value.toString());
-                      findPlaceAutoCompletSearch(value);
-                    },
-                    decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Choisir un point de depart',
-                        prefixIcon: Icon(
-                          FontAwesomeIcons.circleDot,
-                          color: Color(0xFFEDB602),
-                        )),
-                  ),
-                ),
+                
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
                   child: TextFormField(
-                    // controller: destinationController,
+                    controller: destinationController,
                     onChanged: (value) {
                       print(value);
                       debugPrint(value.toString());
@@ -121,43 +104,27 @@ class _FormAdresseState extends State<FormAdresse> {
                         )),
                   ),
                 ),
-                // const Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-                //   child: Row(
-                //     children: [
-                //       // ignore: deprecated_member_use
-                //       Icon(FontAwesomeIcons.location, color: Color(0xFFEDB602)),
-                //       SizedBox(width: 20),
-                //       Text("Votre position actuelle"),
-                //     ],
-                //   ),
-                // ),
           
-               SizedBox(
-                height: 220,
-                // height: MediaQuery.sizeOf(context).height,
-                child:  // la liste des resultat de google Maps
-                (predictionPlacesList.length > 0)
-                ? ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: predictionPlacesList.length,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (context, index){
-                    return PredictionPlaceDesign(
-                      predictionPlacle: predictionPlacesList[index],
-                    );
-                  },
-                  separatorBuilder:(BuildContext context, int index){
-                    return Divider(
-                      height: 0,
-                      color: MesCouleur().couleurPrincipal,
-                    );
-                  },
-                ) : Container(),
-               ),
+               (predictionPlacesList.length > 0)
+               ? ListView.separated(
+                 shrinkWrap: true,
+                 itemCount: predictionPlacesList.length,
+                 physics: ClampingScrollPhysics(),
+                 itemBuilder: (context, index){
+                   return PredictionPlaceDesign(
+                     predictionPlacle: predictionPlacesList[index],
+                   );
+                 },
+                 separatorBuilder:(BuildContext context, int index){
+                   return Divider(
+                     height: 0,
+                     color: MesCouleur().couleurPrincipal,
+                   );
+                 },
+               ) : Container(),
                Padding(
                   padding:
-                      const EdgeInsets.only(top: 1),
+                      const EdgeInsets.only(top: 70),
                   child: Container(
                     child: Image(image: AssetImage("assets/images/33.png")),
                   ),

@@ -5,8 +5,10 @@ import 'package:flutter_taxi_tigui/assistance/requsetAssistant.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/infoHandler/app_info.dart';
 import 'package:flutter_taxi_tigui/models/direction.dart';
+import 'package:flutter_taxi_tigui/models/directionDetailsInfo.dart';
 import 'package:flutter_taxi_tigui/models/userModel.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 
@@ -41,14 +43,40 @@ class AssistanceMethode {
       humanReadableAdress = requestResponse["results"][0]["formatted_address"];
 
       Direction userPickUpAddress = Direction();
-      userPickUpAddress.locationLag = position.latitude;
-      userPickUpAddress.locationLong = position.longitude;
+      userPickUpAddress.locationLagitude = position.latitude;
+      userPickUpAddress.locationLongitude = position.longitude;
       userPickUpAddress.locationName = humanReadableAdress;
       
       Provider.of<AppInfo>(context, listen: false).updatePickupLocationAdress(userPickUpAddress);
     }
 
     return humanReadableAdress;
+
+  }
+
+  static Future<DirectionDetailsInfo> obtainOriginToDestinationDirectionDetails(LatLng originPosition, LatLng destinationPosition) async{
+    
+    var mapKey = "AIzaSyDDGtmVxuMl8rMOacYgbdEfghp2xpOeYQg";
+
+    String urlOriginToDestinationDirectionDetails = "https://maps.googleapis.com/maps/api/directions/json?origin=${originPosition.latitude},${originPosition.longitude}&destination=${destinationPosition.latitude},${destinationPosition.longitude}&key=$mapKey";
+
+    var responseDirectionApi = await RequsetAssistant.receiveRequest(urlOriginToDestinationDirectionDetails);
+
+    // if(responseDirectionApi == "Error Occured. Failed. No  Response.") {
+    //   return;
+    // }
+
+    DirectionDetailsInfo directionDetailsInfo = DirectionDetailsInfo();
+    directionDetailsInfo.e_points = responseDirectionApi["routes"][0]["overview_polyline"]["points"];
+    
+    directionDetailsInfo.distance_text = responseDirectionApi["routes"][0]["legs"][0]["distance"]["text"];
+    directionDetailsInfo.distance_value = responseDirectionApi["routes"][0]["legs"][0]["distance"]["value"];
+
+    directionDetailsInfo.duration_text = responseDirectionApi["routes"][0]["legs"][0]["duration"]["text"];
+    directionDetailsInfo.duration_value = responseDirectionApi["routes"][0]["legs"][0]["duration"]["value"];
+    
+    return directionDetailsInfo;
+
 
   }
 }

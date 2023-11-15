@@ -41,8 +41,8 @@ class _PredictionPlaceDesignState extends State<PredictionPlaceDesign> {
       Direction direction = Direction();
       direction.locationName = responseApi["result"]["name"];
       direction.locationId = placeId;
-      direction.locationLag = responseApi["result"]["geometry"]["location"]["lat"];
-      direction.locationLong = responseApi["result"]["geometry"]["location"]["lng"];
+      direction.locationLagitude = responseApi["result"]["geometry"]["location"]["lat"];
+      direction.locationLongitude = responseApi["result"]["geometry"]["location"]["lng"];
 
       Provider.of<AppInfo>(context, listen: false).updateDropOffAdressLcation(direction);
       setState(() {
@@ -58,6 +58,7 @@ class _PredictionPlaceDesignState extends State<PredictionPlaceDesign> {
     return ElevatedButton(
         onPressed: () {
           getPlaceDirectionDetails(widget.predictionPlacle.place_id, context);
+
         },
         style: ElevatedButton.styleFrom(backgroundColor: Colors.white), 
         child: Padding(padding: EdgeInsets.all(8.0),

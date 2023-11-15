@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/infoHandler/app_info.dart';
 import 'package:flutter_taxi_tigui/models/direction.dart';
 import 'package:flutter_taxi_tigui/pages/APIkey.dart';
+import 'package:flutter_taxi_tigui/pages/formAdresse.dart';
+import 'package:flutter_taxi_tigui/widgets/progressDialog.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_taxi_tigui/widgets/inputSearch.dart';
@@ -55,6 +59,8 @@ class _MapsState extends State<Maps> {
 
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
+
+  // bool darkTheme = false;
   
   
 
@@ -83,6 +89,96 @@ class _MapsState extends State<Maps> {
     
   }
 
+  Future<void> drawPolyLineFromOriginToDestination(bool darkTheme) async{
+    var originPosition = Provider.of<AppInfo>(context, listen: false).userPickeUpLocation;
+    var destinationPosition = Provider.of<AppInfo>(context, listen: false).userDropOfLocation;
+
+    var originLatLng = LatLng(originPosition!.locationLagitude!, originPosition.locationLongitude!);
+    var destinationLagLng = LatLng(destinationPosition!.locationLagitude!, destinationPosition.locationLongitude!);
+
+    //  print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+    //  print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+    //  print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+    //  print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+      
+
+    //   print(originLatLng);
+    //   print(destinationLagLng);
+
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => ProgressDialog(message: "Vueuillez patientez....",),
+      );
+
+      var directionDetailsInfo = await AssistanceMethode.obtainOriginToDestinationDirectionDetails(originLatLng, destinationLagLng);
+
+      setState(() {
+        tripDirectionDetailsInfo = directionDetailsInfo;
+      });
+
+      Navigator.pop(context);
+
+      PolylinePoints pPoints = PolylinePoints();
+      List<PointLatLng> decodePolyLinePointResult = pPoints.decodePolyline(directionDetailsInfo.e_points!);
+
+      
+
+      pLineCoordinatedList.clear();
+
+      if (decodePolyLinePointResult.isNotEmpty) {
+        decodePolyLinePointResult.forEach((PointLatLng pointLatLng) { 
+          pLineCoordinatedList.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+
+        });
+      }
+
+      polylineSet.clear();
+
+      setState(() {
+        Polyline polyline = Polyline(
+          color: MesCouleur().couleurPrincipal,
+          polylineId: PolylineId("PolylineId"),
+          jointType: JointType.round,
+          points: pLineCoordinatedList,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+          geodesic: true,
+          width: 5
+          );
+
+          polylineSet.add(polyline);
+      });
+
+      LatLngBounds boundsLatLng;
+
+      if (originLatLng.latitude > destinationLagLng.latitude && originLatLng.longitude > destinationLagLng.longitude) {
+        boundsLatLng = LatLngBounds(
+          southwest: destinationLagLng, 
+          northeast: originLatLng
+          );
+      }
+      else if(originLatLng.longitude > destinationLagLng.longitude){
+        boundsLatLng = LatLngBounds(
+          southwest: LatLng(originLatLng.latitude, destinationLagLng.longitude),
+          northeast: LatLng(destinationLagLng.latitude, originLatLng.longitude));
+      }
+      else if(originLatLng.latitude > destinationLagLng.latitude){
+         boundsLatLng = LatLngBounds(
+          southwest: LatLng(destinationLagLng.latitude, originLatLng.longitude),
+          northeast: LatLng(originLatLng.latitude, destinationLagLng.longitude));
+      }
+      else {
+        boundsLatLng = LatLngBounds(southwest: originLatLng, northeast: destinationLagLng);
+      }
+
+      newGoogleMapController!.animateCamera(CameraUpdate.newLatLngBounds(boundsLatLng, 45));
+     
+
+
+
+      
+  }
+
   getAddressFromLagLng() async{
     try {
       GeoData data = await Geocoder2.getDataFromCoordinates(
@@ -92,8 +188,8 @@ class _MapsState extends State<Maps> {
         
         setState(() {
           Direction userPickUpAddress = Direction();
-          userPickUpAddress.locationLag = pickLocation!.latitude;
-          userPickUpAddress.locationLong = pickLocation!.longitude;
+          userPickUpAddress.locationLagitude = pickLocation!.latitude;
+          userPickUpAddress.locationLongitude = pickLocation!.longitude;
           userPickUpAddress.locationName = data.address;
           // _address = data.address;
           // print("Recuperer adresse =>#################################################################");
@@ -126,6 +222,7 @@ class _MapsState extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
+    bool darkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return  GestureDetector(
          onTap: (){
           FocusScope.of(context).unfocus();
@@ -176,27 +273,129 @@ class _MapsState extends State<Maps> {
                 ),
                 ),
               ),
-            Positioned(
-              top: 40,
-              right: 20,
-              left: 20,
-                child: Container(
-              decoration:
-                  BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  color: Colors.white
-                  ),
-                  padding: EdgeInsets.all(20),
-                child: Text(
-                  Provider.of<AppInfo>(context).userPickeUpLocation !=null
-                  ? Provider.of<AppInfo>(context).userPickeUpLocation!.locationName!
-                  : "Address",
-                  overflow: TextOverflow.visible, softWrap: true,
+            // Positioned(
+            //   top: 40,
+            //   right: 20,
+            //   left: 20,
+            //     child: Container(
+            //   decoration:
+            //       BoxDecoration(
+            //       border: Border.all(color: Colors.black),
+            //       color: Colors.white
+            //       ),
+            //       padding: EdgeInsets.all(20),
+            //     child: Text(
+            //       Provider.of<AppInfo>(context).userPickeUpLocation !=null
+            //       ? Provider.of<AppInfo>(context).userPickeUpLocation!.locationName!
+            //       : "Address",
+            //       overflow: TextOverflow.visible, softWrap: true,
+            //     ),
+            //   ),
+            // ),
+
+              Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(padding: EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesomeIcons.location, color: Color(0xFFEDB602)),
+                                    SizedBox(width: 10,),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Départ",
+                                        style: TextStyle(color: MesCouleur().couleurPrincipal, fontWeight: FontWeight.bold, fontSize: 14),
+                                        ),
+                                        Text(
+                                        Provider.of<AppInfo>(context).userPickeUpLocation !=null
+                                        ? (Provider.of<AppInfo>(context).userPickeUpLocation!.locationName!)
+                                        : "Votre adresse de depart", 
+                                        style: TextStyle(color: Colors.grey, fontSize: 16),)
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                ),
+                                SizedBox(height: 5,),
+
+                                Divider(
+                                  height: 1,
+                                  thickness: 2,
+                                  color: MesCouleur().couleurPrincipal,
+                                ),
+                                SizedBox(height: 5,),
+
+                                Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      Navigator.push(context, MaterialPageRoute(builder: (c)=> FormAdresse()));
+                                      // if (responseFromSearch == "") {
+                                        
+                                      // }
+
+                                      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                                      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                                      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                                      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                   
+                                      await drawPolyLineFromOriginToDestination(darkTheme);
+                                    },
+                                    child: Row(
+                                  children: [
+                                    Icon(Icons.location_on, color: MesCouleur().couleurPrincipal,),
+                                    SizedBox(width: 10,),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Destination",
+                                        style: TextStyle(color: MesCouleur().couleurPrincipal, fontWeight: FontWeight.bold, fontSize: 14),
+                                        ),
+                                        Text(
+                                        Provider.of<AppInfo>(context).userDropOfLocation != null
+                                        ? Provider.of<AppInfo>(context).userDropOfLocation!.locationName!
+                                        : "Où voulez-vous aller ?", 
+                                        style: TextStyle(color: Colors.grey, fontSize: 16),)
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+                ),
             ),
               
-              InputSearch(),
+              // InputSearch(),
             ],
           ),
          ),
