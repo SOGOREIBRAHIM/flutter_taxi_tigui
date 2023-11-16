@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/infoHandler/app_info.dart';
 import 'package:flutter_taxi_tigui/pages/annulerReservation.dart';
 import 'package:flutter_taxi_tigui/pages/apropos.dart';
@@ -26,7 +27,7 @@ class TaxiTigui extends StatelessWidget {
       child: MaterialApp(
       title: "TAXI TIGI",
       theme: ThemeData(
-        splashColor: Color(0xFFEDB602),
+        splashColor: MesCouleur().couleurPrincipal,
         primarySwatch: Colors.amber,
         fontFamily: "Poppins"
       ),

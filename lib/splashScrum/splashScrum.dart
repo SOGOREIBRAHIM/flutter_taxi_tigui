@@ -42,7 +42,7 @@ class _SlapshState extends State<Slapsh> {
         decoration: BoxDecoration(color: Colors.black),
           child: Image.asset(
         "assets/images/demarrage.png",
-        height: 1200,
+        height: MediaQuery.sizeOf(context).height,
       )),
     );
   }
