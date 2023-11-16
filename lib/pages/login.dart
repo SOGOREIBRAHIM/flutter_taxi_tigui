@@ -24,8 +24,9 @@ class _ConnexionState extends State<Connexion> {
               email: emailControler.text.trim(),
               password: passControler.text.trim())
           .then((auth) async {
+            
         currentUser = auth.user;
-       
+        print(currentUser.toString());
         await Fluttertoast.showToast(msg: "Connexion reussit");
         Navigator.push(
             context, MaterialPageRoute(builder: (index) => accueil()));

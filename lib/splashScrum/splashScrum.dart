@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
+import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
 
 class Slapsh extends StatefulWidget {
@@ -17,8 +18,9 @@ class _SlapshState extends State<Slapsh> {
   startTime(){
     Timer(Duration(seconds:5), () async {
       if (await firebaseAuth.currentUser != null) {
-        firebaseAuth.currentUser != null ? AssistanceMethode.readCurrentOnlineInfo() : null;
-        Navigator.push(context, MaterialPageRoute(builder: ((context) => Connexion())));
+        print(firebaseAuth.currentUser.toString());
+        AssistanceMethode.readCurrentOnlineInfo();
+        Navigator.push(context, MaterialPageRoute(builder: ((context) => accueil())));
       }
       else{
         Navigator.push(context, MaterialPageRoute(builder: ((context) => Connexion())));

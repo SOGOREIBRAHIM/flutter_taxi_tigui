@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
+import 'package:flutter_taxi_tigui/models/userModel.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 
 class profil extends StatefulWidget {
@@ -11,26 +12,27 @@ class profil extends StatefulWidget {
 }
 
 class _profilState extends State<profil> {
+  
 
   final prenomController = TextEditingController();
   final nomController = TextEditingController();
   final numeroController = TextEditingController();
   final emailController = TextEditingController();
 
-  Future<void> showUserDialogAlert(BuildContext context, String prenom) {
-
+  Future<void> showUserDialogAlert(BuildContext context, String prenom){
     prenomController.text = prenom;
 
     return showDialog(
       context: context, 
       builder: (context){
         return AlertDialog(
-          title: Text("Modifier"),
+          title: Text("Enregistrer"),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextFormField(
                   controller: nomController,
+                  
                 )
               ],
             ),
@@ -50,7 +52,7 @@ class _profilState extends State<profil> {
               Navigator.pop(context);
             }, 
             child: Text(
-              "Enregistrer",
+              "Enregister",
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -64,6 +66,7 @@ class _profilState extends State<profil> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentUser);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context);
@@ -134,21 +137,38 @@ class _profilState extends State<profil> {
                       color: Color(0xFFEBEBEB),
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                    child: Column(
                       children: [
-                        Text("${userModelCurrentInfo!.prenom!}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Nom ====================================
+                            Icon(Icons.person),
+                            SizedBox(width: 10,),
+                            Text("${userModelCurrentInfo!.nom!}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            ),
+                            ),
+                            SizedBox(width: 100,),
+                            IconButton(onPressed: () {
+                               showUserDialogAlert(context, userModelCurrentInfo!.phone!);
+                               print("##########################################################");
+                               print("##########################################################");
+                               print("##########################################################");
+                               print("##########################################################");
+                               print(userModelCurrentInfo!.prenom!);
+                            }, icon: Icon(Icons.edit_outlined),color: MesCouleur().couleurPrincipal,)
+                          ],
                         ),
+                        Divider(
+                          thickness: 2,
                         ),
-                        IconButton(onPressed: () {
-                          showUserDialogAlert(context, userModelCurrentInfo!.prenom!);
-                          print("--------------------------------------------------------");
-                          print(userModelCurrentInfo!.prenom!);
-                        }, icon: Icon(Icons.edit_outlined),color: MesCouleur().couleurPrincipal,)
+
+                        
+
                       ],
                     ),
                   ),

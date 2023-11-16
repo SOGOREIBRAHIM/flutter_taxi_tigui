@@ -22,7 +22,7 @@ class UserModel {
     nom = (snap.value as dynamic)["nom"];
     prenom = (snap.value as dynamic)["prenom"];
     email = (snap.value as dynamic)["email"];
-    phone = (snap.value as dynamic)["phone"];
+    phone = (snap.value as dynamic)["numero"];
   }
 
 
