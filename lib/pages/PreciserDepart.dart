@@ -124,8 +124,8 @@ class _PreciserDepartState extends State<PreciserDepart> {
             child: Padding(
               padding: EdgeInsets.only(top: 60,bottom: bottomPaddingOfMap),
               child: Icon(
-                Icons.location_on_rounded,
-                color: MesCouleur().couleurPrincipal,
+                Icons.location_on,
+                color: MesCouleur().couleurPrincipal,size: 50,
               ),
             ),
           ),

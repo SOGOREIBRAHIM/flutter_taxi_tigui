@@ -29,6 +29,7 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
       appBar: AppBar(
         backgroundColor: Color(0xFFFFFFFF),
         elevation: 0,
+        centerTitle: true,
         title: const Text(
           "Mode de paiement",
           style: TextStyle(color: Color(0xFFEDB602)),
@@ -43,6 +44,7 @@ class _ChoixPaiementState extends State<ChoixPaiement> {
             icon: const Icon(
               Icons.close,
               color: Color(0xFFEDB602),
+              size: 30,
             )),
       ),
       body: SingleChildScrollView(

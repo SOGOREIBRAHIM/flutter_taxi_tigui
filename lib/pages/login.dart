@@ -5,6 +5,7 @@ import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/passwordForget.dart';
+import 'package:flutter_taxi_tigui/pages/sign.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Connexion extends StatefulWidget {
@@ -29,7 +30,7 @@ class _ConnexionState extends State<Connexion> {
         Navigator.push(
             context, MaterialPageRoute(builder: (index) => accueil()));
       }).catchError((errorMessage){
-        Fluttertoast.showToast(msg: "Inscription echoué");
+        Fluttertoast.showToast(msg: "Connexion echoué");
       });
     }
     else{
@@ -237,7 +238,7 @@ class _ConnexionState extends State<Connexion> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PasswordForget() ),
+                                        builder: (context) => Inscription() ),
                                   );
                                 },
                                 child: const Text(

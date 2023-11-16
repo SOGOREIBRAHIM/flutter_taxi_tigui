@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
+import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:flutter_taxi_tigui/pages/paiement.dart';
-import 'package:flutter_taxi_tigui/widgets/inputSearch.dart';
+import 'package:flutter_taxi_tigui/pages/profil.dart';
+import 'package:flutter_taxi_tigui/pages/trajet.dart';
 import 'package:flutter_taxi_tigui/widgets/maps.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -33,24 +35,44 @@ class _HomeState extends State<Home> {
         children: [
           const Maps(),
           // InputSearch(),
-          IconButton(
-            // padding: const EdgeInsets.only(top: 50, left: 20),
-            onPressed: () {
-              _scaffoldKey.currentState!.openDrawer();
-            },
-            icon: const Icon(
-              Icons.menu_sharp,
-              color: Color(0xFFEDB602),
-              size: 50,
+
+          Positioned(
+            top: 15,
+            left: 20,
+            child: Container(
+              height: 50,
+              width: 50,
+              child: GestureDetector(
+                onTap: () {
+                  _scaffoldKey.currentState!.openDrawer();
+                },
+                child: CircleAvatar(
+                  backgroundColor: MesCouleur().couleurPrincipal,
+                  child: Icon(
+                    (Icons.menu), color: Colors.white,size: 40,
+                  ),
+                ),
+              ),
             ),
-            // icon: ImageIcon(AssetImage("assets/images/menu.png"),color: Color(0xFFEDB602), size: 200,),
-          ),
+            )
+          // IconButton(
+          //   // padding: const EdgeInsets.only(top: 50, left: 20),
+          //   onPressed: () {
+          //     _scaffoldKey.currentState!.openDrawer();
+          //   },
+          //   icon: const Icon(
+          //     Icons.menu_sharp,
+          //     color: Color(0xFFEDB602),
+          //     size: 50,
+          //   ),
+          //   // icon: ImageIcon(AssetImage("assets/images/menu.png"),color: Color(0xFFEDB602), size: 200,),
+          // ),
         ],
       ),
       drawer: Drawer(
           child: Column(
         children: [
-          const DrawerHeader(
+           DrawerHeader(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     colors: [Color(0xFFEDB602), Color(0xFFFFFFFF)])),
@@ -81,9 +103,48 @@ class _HomeState extends State<Home> {
                         fontSize: 20,
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => profil()));
+                      },
+                      child: Text(
+                        "Voir mon profil",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                        ),
+                    )
                   ],
                 )
               ],
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(builder: ((context) => Paiement())));
+            },
+            leading:
+                Icon(FontAwesomeIcons.wallet, size: 25, color: Color(0xFFEDB602)),
+            trailing: Icon(Icons.arrow_forward_ios_sharp, size: 18),
+            title: const Text(
+              "Paiement",
+              style:
+                  TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 18),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(builder: ((context) => Trajet())));
+            },
+            leading:
+                Icon(FontAwesomeIcons.route, size: 25, color: Color(0xFFEDB602)),
+            trailing: Icon(Icons.arrow_forward_ios_sharp, size: 18),
+            title: const Text(
+              "Trajets",
+              style:
+                  TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 18),
             ),
           ),
           ListTile(
@@ -132,3 +193,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+

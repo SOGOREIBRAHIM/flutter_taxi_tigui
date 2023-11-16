@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taxi_tigui/pages/accueil.dart';
 
 class Paiement extends StatefulWidget {
   const Paiement({super.key});
@@ -20,14 +21,25 @@ class _PaiementState extends State<Paiement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Pour supprimer le bouton de retour
-        centerTitle: true, // Pour centrer le titre
-        backgroundColor: Color(0xFFEDB602),
+        backgroundColor: Color(0xFFFFFFFF),
         elevation: 0,
+        centerTitle: true,
         title: const Text(
           "Paiement",
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255),fontWeight: FontWeight.bold,fontSize: 25),
+          style: TextStyle(color: Color(0xFFEDB602)),
         ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => accueil()),
+              );
+            },
+            icon: const Icon(
+              Icons.close,
+              color: Color(0xFFEDB602),
+              size: 30,
+            )),
       ),
       body: SingleChildScrollView(
         child: Column(

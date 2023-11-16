@@ -19,7 +19,7 @@ class _accueilState extends State<accueil> {
     Home(),
     Paiement(),
     Trajet(),
-    Profil(),
+    // Profil(),
 
   ];
 
@@ -27,39 +27,39 @@ class _accueilState extends State<accueil> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[indexCourant],
-      bottomNavigationBar: 
-        Container(
+      // bottomNavigationBar: 
+      //   Container(
           
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration:  BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(255, 59, 59, 59).withOpacity(0.5),
-                blurRadius: 25,
-                offset: const Offset(8, 20),
-              )
-            ]
-          ),
-          child: ClipRRect(
-           borderRadius: BorderRadius.circular(50),
-            child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 255, 255, 255),
-            selectedItemColor: const Color(0xFFEDB602),
-            unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
-            currentIndex: indexCourant,
-            onTap: (index){
-              setState(() {
-                indexCourant = index;
-              });
-            },
-            items:  [
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.house), label: "Accueil"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Paiement"),
-            BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route,), label: "Trajet"),
-            BottomNavigationBarItem(icon: Icon(Icons.person_2,size: 35), label: "Profil"),
-                ],),
-          ),
-        ),
+      //     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      //     decoration:  BoxDecoration(
+      //       boxShadow: [
+      //         BoxShadow(
+      //           color: Color.fromARGB(255, 59, 59, 59).withOpacity(0.5),
+      //           blurRadius: 25,
+      //           offset: const Offset(8, 20),
+      //         )
+      //       ]
+      //     ),
+      //     child: ClipRRect(
+      //      borderRadius: BorderRadius.circular(50),
+      //       child: BottomNavigationBar(
+      //       backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      //       selectedItemColor: const Color(0xFFEDB602),
+      //       unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
+      //       currentIndex: indexCourant,
+      //       onTap: (index){
+      //         setState(() {
+      //           indexCourant = index;
+      //         });
+      //       },
+      //       items:  [
+      //       BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.house), label: "Accueil"),
+      //       BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.wallet), label: "Paiement"),
+      //       BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.route,), label: "Trajet"),
+      //       BottomNavigationBarItem(icon: Icon(Icons.person_2,size: 35), label: "Profil"),
+      //           ],),
+      //     ),
+      //   ),
     );
   }
 }
