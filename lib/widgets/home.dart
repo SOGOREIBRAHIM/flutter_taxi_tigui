@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
+import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/pages/devenirChauffeur.dart';
 import 'package:flutter_taxi_tigui/pages/login.dart';
 import 'package:flutter_taxi_tigui/pages/paiement.dart';
 import 'package:flutter_taxi_tigui/pages/profil.dart';
 import 'package:flutter_taxi_tigui/pages/trajet.dart';
+import 'package:flutter_taxi_tigui/splashScrum/splashScrum.dart';
 import 'package:flutter_taxi_tigui/widgets/maps.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -18,9 +20,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int indexCourant = 0;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List pages = [
-    DevenirChauffeur(),
-  ];
+  // List pages = [
+  //   DevenirChauffeur(),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -187,8 +189,24 @@ class _HomeState extends State<Home> {
               style:
                   TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 18),
             ),
-          )
+          ),
+          SizedBox(height: 250,),
+          ListTile(
+            onTap: () {
+              firebaseAuth.signOut();
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(builder: ((context) => Slapsh())));
+            },
+            leading: Icon(Icons.logout, size: 30, color: Colors.red),
+            trailing: Icon(Icons.arrow_forward_ios_sharp, size: 18,color:Colors.red, ),
+            title: const Text(
+              "Se deconnecter",
+              style:
+                  TextStyle(color: Colors.red, fontSize: 18),
+            ),
+          ),
         ],
+        
       )),
     );
   }
