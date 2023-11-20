@@ -17,15 +17,13 @@ class _PasswordForgetState extends State<PasswordForget> {
   final emailControler = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _submit(){
-    firebaseAuth.sendPasswordResetEmail(email: emailControler.text.trim()
-    ).then((value) {
+  Future<void> _submit()async{
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: emailControler.text.trim());
       Fluttertoast.showToast(msg: "nous vous avons envoyé un e-mail pour récupérer, veuillez vérifier vos e-mails");
-    }).onError((error, stackTrace) {
+    } catch (e) {
       Fluttertoast.showToast(msg: "erreur est survenue");
-    });
-
-
+    }
   }
 
 
@@ -111,8 +109,8 @@ class _PasswordForgetState extends State<PasswordForget> {
                                       width: 350,
                                       height: 50,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          _submit();
+                                        onPressed: () async{
+                                          await _submit();
                                         },
                                         child: Text(
                                           'Lien de réinitialisation envoyé',

@@ -18,32 +18,33 @@ class Connexion extends StatefulWidget {
 
 class _ConnexionState extends State<Connexion> {
 
-  void _submit() async {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
-      await firebaseAuth
+      try {
+        final auth = await firebaseAuth
           .signInWithEmailAndPassword(
               email: emailControler.text.trim(),
-              password: passControler.text.trim())
-          .then((auth) async {
-            
-         DatabaseReference userRef =
+              password: passControler.text.trim());
+
+        DatabaseReference userRef =
               FirebaseDatabase.instance.ref().child("users");
-          userRef.child(firebaseAuth.currentUser!.uid).once().then((value) async{
-            final snap = value.snapshot;
-            if (snap.value != null) {
-              currentUser = auth.user;
-              await Fluttertoast.showToast(msg: "Connexion reussit");
-              Navigator.push(context, MaterialPageRoute(builder: (index) => accueil()));
-            }
-            else{
-              await Fluttertoast.showToast(msg: "Vous n'avez pas de compte !");
-              firebaseAuth.signOut();
-              Navigator.push(context, MaterialPageRoute(builder: (index) => Connexion()));
-            }
-          });
-      }).catchError((errorMessage){
+
+        final value = await userRef.child(firebaseAuth.currentUser!.uid).once();
+        final snap = value.snapshot;
+        if (snap.value != null) {
+          currentUser = auth.user;
+          await Fluttertoast.showToast(msg: "Connexion reussie");
+          Navigator.push(context, MaterialPageRoute(builder: (index) => accueil()));
+        }
+        else{
+          await Fluttertoast.showToast(msg: "Vous n'avez pas de compte !");
+          firebaseAuth.signOut();
+          Navigator.push(context, MaterialPageRoute(builder: (index) => Connexion()));
+        }
+      } catch (e) {
         Fluttertoast.showToast(msg: "Connexion echoué");
-      });
+        throw Exception(e.toString());
+      }
     }
     else{
       Fluttertoast.showToast(msg: "Remplissez les champs vides");
@@ -188,8 +189,8 @@ class _ConnexionState extends State<Connexion> {
                                     width: 350,
                                     height: 50,
                                     child: ElevatedButton(
-                                      onPressed: () {
-                                        _submit();
+                                      onPressed: () async{
+                                        await _submit();
                                       },
                                       child: Text(
                                         'S\'inscrire',

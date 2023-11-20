@@ -22,7 +22,7 @@ class PredictionPlaceDesign extends StatefulWidget {
 
 class _PredictionPlaceDesignState extends State<PredictionPlaceDesign> {
 
-  getPlaceDirectionDetails(String? placeId, context ) async{
+  Future<void> getPlaceDirectionDetails(String? placeId, context ) async{
     showDialog(
       context: context, 
       builder: (BuildContext context) => ProgressDialog(
@@ -56,8 +56,8 @@ class _PredictionPlaceDesignState extends State<PredictionPlaceDesign> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {
-          getPlaceDirectionDetails(widget.predictionPlacle.place_id, context);
+        onPressed: () async {
+          await getPlaceDirectionDetails(widget.predictionPlacle.place_id, context);
 
         },
         style: ElevatedButton.styleFrom(backgroundColor: Colors.white), 

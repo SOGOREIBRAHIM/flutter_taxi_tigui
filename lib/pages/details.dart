@@ -159,8 +159,8 @@ class _DetailsState extends State<Details> {
                             padding: EdgeInsets.fromLTRB(90, 15, 90, 15),
                             minimumSize: Size(360, 20),
                             shadowColor: Color.fromARGB(255, 56, 56, 56)),
-                        onPressed: () {
-                          _showMyDialog(context);
+                        onPressed: () async{
+                          await _showMyDialog(context);
                         },
                       ),
                     ),

@@ -31,7 +31,7 @@ class _FormAdresseState extends State<FormAdresse> {
 
   List<PredictionPlacle> predictionPlacesList = [];
 
-  findPlaceAutoCompletSearch(String inputText) async{
+  Future<void> findPlaceAutoCompletSearch(String inputText) async{
     if (inputText.length > 1) {
       var mapKey = "AIzaSyDDGtmVxuMl8rMOacYgbdEfghp2xpOeYQg";
       String urlAutoCompleteSearch = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$inputText&key=$mapKey&components=country:ML";
@@ -88,10 +88,10 @@ class _FormAdresseState extends State<FormAdresse> {
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
                   child: TextFormField(
                     controller: destinationController,
-                    onChanged: (value) {
+                    onChanged: (value) async{
                       print(value);
                       debugPrint(value.toString());
-                      findPlaceAutoCompletSearch(value);
+                      await findPlaceAutoCompletSearch(value);
                     },
                     decoration: const InputDecoration(
                         border: UnderlineInputBorder(),

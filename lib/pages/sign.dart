@@ -17,7 +17,7 @@ class Inscription extends StatefulWidget {
 
 class _InscriptionState extends State<Inscription> {
   // fonction de verification et enregistrement
-  void _submit() async {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
       await firebaseAuth
           .createUserWithEmailAndPassword(
@@ -318,8 +318,8 @@ class _InscriptionState extends State<Inscription> {
                                     width: 350,
                                     height: 50,
                                     child: ElevatedButton(
-                                      onPressed: () {
-                                        _submit();
+                                      onPressed: () async {
+                                       await _submit();
                                       },
                                       child: Text(
                                         'S\'inscrire',

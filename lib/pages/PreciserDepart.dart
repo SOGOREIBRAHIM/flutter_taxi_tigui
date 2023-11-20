@@ -37,7 +37,7 @@ class _PreciserDepartState extends State<PreciserDepart> {
 
   double bottomPaddingOfMap = 0;
 
-  locateUserPosition() async {
+  Future<void> locateUserPosition() async {
     Position cPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -62,7 +62,7 @@ class _PreciserDepartState extends State<PreciserDepart> {
     // AssistanceMethode.readCurrentOnlineInfo(context);
   }
 
-  getAddressFromLagLng() async {
+  Future<void> getAddressFromLagLng() async {
     try {
       GeoData data = await Geocoder2.getDataFromCoordinates(
           latitude: pickLocation!.latitude,
@@ -98,7 +98,7 @@ class _PreciserDepartState extends State<PreciserDepart> {
             zoomControlsEnabled: false,
             zoomGesturesEnabled: true,
             initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
+            onMapCreated: (GoogleMapController controller) async {
               _googleMapController.complete(controller);
               newGoogleMapController = controller;
 
@@ -106,7 +106,7 @@ class _PreciserDepartState extends State<PreciserDepart> {
                 bottomPaddingOfMap = 50;
               });
 
-              locateUserPosition();
+              await locateUserPosition();
             },
             onCameraMove: (CameraPosition? position) {
               if (pickLocation != position!.target) {
@@ -115,8 +115,8 @@ class _PreciserDepartState extends State<PreciserDepart> {
                 });
               }
             },
-            onCameraIdle: () {
-              getAddressFromLagLng();
+            onCameraIdle: () async{
+              await getAddressFromLagLng();
             },
           ),
           Align(

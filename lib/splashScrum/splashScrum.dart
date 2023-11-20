@@ -19,7 +19,7 @@ class _SlapshState extends State<Slapsh> {
     Timer(Duration(seconds:5), () async {
       if (await firebaseAuth.currentUser != null) {
         print(firebaseAuth.currentUser.toString());
-        AssistanceMethode.readCurrentOnlineInfo();
+        await AssistanceMethode.readCurrentOnlineInfo();
         Navigator.push(context, MaterialPageRoute(builder: ((context) => accueil())));
       }
       else{

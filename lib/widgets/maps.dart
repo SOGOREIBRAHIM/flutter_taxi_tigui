@@ -2,17 +2,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
+import 'package:flutter_taxi_tigui/assistance/geofire_assistance.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
 import 'package:flutter_taxi_tigui/global/global.dart';
 import 'package:flutter_taxi_tigui/infoHandler/app_info.dart';
+import 'package:flutter_taxi_tigui/models/active_nearby_availablewhen_driver.dart';
 import 'package:flutter_taxi_tigui/pages/PreciserDepart.dart';
 import 'package:flutter_taxi_tigui/pages/formAdresse.dart';
 import 'package:flutter_taxi_tigui/widgets/progressDialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:provider/provider.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 
 class Maps extends StatefulWidget {
   const Maps({super.key});
@@ -52,9 +56,16 @@ class _MapsState extends State<Maps> {
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
 
+  bool activeNearbyDriverKeysLoaded = false;
+
+  BitmapDescriptor? activeNearbyIcon;
+
+  double searchLocationContainerHeight = 200;
+  double suggestedRidesContainerHeight = 0;
+
   // bool darkTheme = false;
 
-  locateUserPosition() async {
+  Future<void> locateUserPosition() async {
     Position cPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -77,10 +88,107 @@ class _MapsState extends State<Maps> {
     userName = userModelCurrentInfo!.nom!;
     userEmail = userModelCurrentInfo!.email!;
 
-    // initializeGeoFireListener();
+    initializeGeoFireListener();
 
     // AssistanceMethode.readCurrentOnlineInfo(context);
   }
+
+  // initialiser geofire du drivers
+  initializeGeoFireListener(){
+    Geofire.initialize("activeDrivers");
+
+    Geofire.queryAtLocation(userCurrentPosition!.latitude, userCurrentPosition!.longitude, 10)!
+      .listen((map) {
+        print(map);
+
+        if (map != null) {
+          var callback = map["callBack"];
+
+          switch(callback){
+            // chaque fois qu'un drivers devient actif/en ligne
+            case Geofire.onKeyEntered:
+            ActiveNearbyAvailableDriver activeNearbyAvailableDriver = ActiveNearbyAvailableDriver();
+            activeNearbyAvailableDriver.locationLatitude = map["latitude"];
+            activeNearbyAvailableDriver.locationLongitude = map["longitude"];
+            print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            print(activeNearbyAvailableDriver.toString());
+            print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            activeNearbyAvailableDriver.driverId = map["key"];
+            GeofireAssistance.activeNearbyAvailableDriverList.add(activeNearbyAvailableDriver);
+            if(activeNearbyDriverKeysLoaded == true){
+              displayActiveDriverOnUsersMap();
+            }
+            break;
+
+            // chaque fois qu'un drivers devient non actif/en ligne
+            case Geofire.onKeyExited:
+              GeofireAssistance.deleteOffLineDriverFromList(map["key"]);
+              displayActiveDriverOnUsersMap();
+              break;
+
+            // quand le chauffeur se déplace - mettre à jour l'emplacement du chauffeur
+            case Geofire.onKeyMoved:
+              ActiveNearbyAvailableDriver activeNearbyAvailableDriver = ActiveNearbyAvailableDriver();
+              activeNearbyAvailableDriver.locationLatitude = map["latitude"];
+              activeNearbyAvailableDriver.locationLongitude= map["longitude"];
+              activeNearbyAvailableDriver.driverId = map["key"];
+              GeofireAssistance.updateActiveNearbyAvailableDriverLocation(activeNearbyAvailableDriver);
+              displayActiveDriverOnUsersMap();
+              break;
+
+            // afficher ces chauffeur actifs en ligne sur la carte de l'utilisateur
+            case Geofire.onGeoQueryReady:
+              activeNearbyDriverKeysLoaded = true;
+              displayActiveDriverOnUsersMap();
+              break;
+          }
+        }
+        setState(() {
+          
+        });
+      });
+
+  }
+
+  
+
+  displayActiveDriverOnUsersMap(){
+    setState(() {
+      markersSet.clear();
+      circlesSet.clear();
+      Set<Marker> driverMarker = Set<Marker>();
+      final activeNearbyAvailableDriverList = GeofireAssistance.activeNearbyAvailableDriverList;
+
+      for(ActiveNearbyAvailableDriver eachDriver in activeNearbyAvailableDriverList){
+        LatLng eachDriverActivePosition = LatLng(eachDriver.locationLatitude!, eachDriver.locationLongitude!);
+        Marker marker = Marker(
+          markerId: MarkerId(eachDriver.driverId!), 
+          position: eachDriverActivePosition,
+          icon: activeNearbyIcon!,
+          rotation: 360,
+          );
+
+          driverMarker.add(marker);
+      }
+
+      setState(() {
+        markersSet = driverMarker;
+      });
+      print("");
+    });
+  }
+
+  Future<void> createActiveNearByDriverIconMarker() async {
+    if (activeNearbyIcon == null) {
+      ImageConfiguration imageConfiguration = createLocalImageConfiguration(context,size: Size(2, 2));
+      final value = await BitmapDescriptor.fromAssetImage(imageConfiguration, "assets/images/RAV.png");
+      activeNearbyIcon = value;
+    }
+  }
+
+  
+
+  
 
   Future<void> drawPolyLineFromOriginToDestination(bool darkTheme) async {
     var originPosition =
@@ -211,6 +319,16 @@ class _MapsState extends State<Maps> {
     });
   }
 
+  void showSuggestedRidesContainer(){
+
+    setState(() {
+      suggestedRidesContainerHeight = 400;
+      bottomPaddingOfMap = 400;
+      
+    });
+
+  }
+
   // getAddressFromLagLng() async{
   //   try {
   //     GeoData data = await Geocoder2.getDataFromCoordinates(
@@ -235,7 +353,7 @@ class _MapsState extends State<Maps> {
   //   }
   // }
 
-  checkLocationPermissionAlowed() async {
+  Future<void> checkLocationPermissionAlowed() async {
     _locationPermission = await Geolocator.requestPermission();
 
     if (_locationPermission == LocationPermission.denied) {
@@ -247,13 +365,14 @@ class _MapsState extends State<Maps> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkLocationPermissionAlowed();
+    Future(()async=> await checkLocationPermissionAlowed());
   }
 
   @override
   Widget build(BuildContext context) {
     bool darkTheme =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
+        Future(() async => await createActiveNearByDriverIconMarker());
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -272,15 +391,15 @@ class _MapsState extends State<Maps> {
               polylines: polylineSet,
               markers: markersSet,
               circles: circlesSet,
-              onMapCreated: (GoogleMapController controller) {
+              onMapCreated: (GoogleMapController controller) async {
                 _googleMapController.complete(controller);
                 newGoogleMapController = controller;
 
                 setState(() {
                   bottomPaddingOfMap = 200;
                 });
-
-                locateUserPosition();
+                  await locateUserPosition();
+                // createActiveNearByDriverIconMarker();
               },
               // onCameraMove: (CameraPosition? position){
               //   if (pickLocation != position!.target ) {
@@ -378,7 +497,7 @@ class _MapsState extends State<Maps> {
                                         bottomPaddingOfMap = 100;
                                       });
 
-                                      drawPolyLineFromOriginToDestination(
+                                      await drawPolyLineFromOriginToDestination(
                                           darkTheme);
                                     },
                                     child: Row(
@@ -450,7 +569,14 @@ class _MapsState extends State<Maps> {
                                 width: 10,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (Provider.of<AppInfo>(context, listen: false).userDropOfLocation != null) {
+                                    showSuggestedRidesContainer();
+                                  }
+                                  else{
+                                    Fluttertoast.showToast(msg: "Selectionner une destination");
+                                  }
+                                },
                                 child: Text(
                                   "Demander trajet",
                                   style: TextStyle(
