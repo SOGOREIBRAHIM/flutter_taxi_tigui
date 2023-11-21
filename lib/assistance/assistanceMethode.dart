@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_taxi_tigui/assistance/requsetAssistant.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_taxi_tigui/models/userModel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 
 class AssistanceMethode {
@@ -76,7 +79,49 @@ class AssistanceMethode {
     directionDetailsInfo.duration_value = responseDirectionApi["routes"][0]["legs"][0]["duration"]["value"];
     
     return directionDetailsInfo;
+  }
 
+  // Calculer le montant du tarif entre la position et le destination
+  static double calculFareAmountFromOriginToDestination(DirectionDetailsInfo directionDetailsInfo){
+    double timeTravelledFareAmountPerMinute = (directionDetailsInfo.duration_value!/60)*0.1;
+    double distanceTravelleAmountPerKilometre = (directionDetailsInfo.distance_value!/1000)*0.1;
 
+    double totalFareAmount = timeTravelledFareAmountPerMinute + distanceTravelleAmountPerKilometre;
+    int totalFareAmountAsInt = totalFareAmount.toInt();
+    return double.parse(totalFareAmountAsInt.toStringAsFixed(1));
+  }
+
+  static sendNotificationToDriverNow(String deviceRegistrationToken, String userRideRequestId, context) async{
+    String destinationAdress = userDropOffAdress;
+
+    Map<String,String> headerNotification ={
+        'Conetent-type': 'application/json',
+        'Autorization': cloudMessagingServerToken,
+    };
+
+     Map bodyNotification = {
+      "body": "Destination Address: \n $destinationAdress",
+      "title": "Nouvelle demande de reservation"
+    };
+
+    Map dataMap = {
+      "click_action": "FLUTTER_NOTIFICATION_CLICK",
+      "id": "1",
+      "status": "done",
+      "rideRequestId": userRideRequestId
+    };
+
+    Map officialNotificationFormat = {
+      "notification": bodyNotification,
+      "data": dataMap,
+      "priority": "high",
+      "to": deviceRegistrationToken,
+    };
+
+    var responseNotification = http.post(
+      Uri.parse("https://fcm.googleapis.com/fcm/send"),
+      headers: headerNotification,
+      body: jsonEncode(officialNotificationFormat)
+    );
   }
 }
