@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_taxi_tigui/Pay_Fare_Amount_Dialog.dart';
 import 'package:flutter_taxi_tigui/assistance/assistanceMethode.dart';
 import 'package:flutter_taxi_tigui/assistance/geofire_assistance.dart';
 import 'package:flutter_taxi_tigui/config/configurationCouleur.dart';
@@ -390,6 +391,7 @@ class _MapsState extends State<Maps> {
     }
   }
 
+  // enregistrer les informations de demande de trajet
   saveRideRequestInformation(String selectedVehiculeType){
     // 1 enregistrer les reservations
     referenceRideRequest = FirebaseDatabase.instance.ref().child("All Ride Request");
@@ -399,14 +401,14 @@ class _MapsState extends State<Maps> {
     Map originLocationMap = {
       // key: value
       "latitude": originLocation!.locationLagitude.toString(),
-      "longitude": originLocation!.locationLongitude.toString(),
+      "longitude": originLocation.locationLongitude.toString(),
 
     };
 
     Map destinationLocationMap = {
       // key: value
       "latitude": destinationLocation!.locationLagitude.toString(),
-      "longitude": destinationLocation!.locationLongitude.toString(),
+      "longitude": destinationLocation.locationLongitude.toString(),
 
     };
 
@@ -423,6 +425,7 @@ class _MapsState extends State<Maps> {
 
     referenceRideRequest!.set(userInformationMap);
 
+    // Abonnement au flux des infos
     tripRideRequestinfoStreamSubscription = referenceRideRequest!.onValue.listen((eventSnap) {
         
       if (eventSnap.snapshot.value == null) {
@@ -431,6 +434,9 @@ class _MapsState extends State<Maps> {
       if ((eventSnap.snapshot.value as Map)["details_car"] != null) {
         setState(() {
           driverCarDetails = (eventSnap.snapshot.value as Map)["details_car"].toString();
+          print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+          print(driverCarDetails);
+          print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         });
       }
       if ((eventSnap.snapshot.value as Map)["driverPhone"] != null) {
@@ -470,27 +476,27 @@ class _MapsState extends State<Maps> {
             updateReachingTimeToUseDropOffLocation(driverCurrentPositionLatLng);
           }
           // status = terminer
-          // if (userRideRequestStatus == "ended") {
-          //   if ((eventSnap.snapshot.value as Map)["fareAmount"] != null) {
-          //     double fareAmount = double.parse((eventSnap.snapshot.value as Map)["fareAmount"].toString());
+          if (userRideRequestStatus == "ended") {
+            if ((eventSnap.snapshot.value as Map)["fareAmount"] != null) {
+              double fareAmount = double.parse((eventSnap.snapshot.value as Map)["fareAmount"].toString());
 
-          //     var response = await showDialog(
-          //       context: context, 
-          //       builder: (BuildContext context) => PayFareAmountDialog(
-          //         fareAmount: fareAmount,
-          //       )
-          //       )
+              var response = await showDialog(
+                context: context, 
+                builder: (BuildContext context) => PayFareAmountDialog(
+                  fareAmount: fareAmount,
+                )
+                );
 
-          //       if (response == "cash Paid") {
-          //         if ((eventSnap.snapshot.value as Map)["driverId"] != null) {
-          //           String assigneDriverId = (eventSnap.snapshot.value as Map)["driverId"].toString();
-
-          //           referenceRideRequest!.onDisconnect();
-          //           tripRideRequestinfoStreamSubscription!.cancel();
-          //         }
-          //       }
-          //   }
-          // }
+                if (response == "cash Paid") {
+                  if ((eventSnap.snapshot.value as Map)["driverId"] != null) {
+                    String assigneDriverId = (eventSnap.snapshot.value as Map)["driverId"].toString();
+                    // Navigator.push(context, MaterialPageRoute(builder: (c)=> ))
+                    referenceRideRequest!.onDisconnect();
+                    tripRideRequestinfoStreamSubscription!.cancel();
+                  }
+                }
+            }
+          }
         });
       }
     });
@@ -500,6 +506,7 @@ class _MapsState extends State<Maps> {
 
   }
 
+  // rechercher les pilotes en ligne les plus proches
   searchNearestOnlineDrivers(String selectedVehiculeType) async{
     if (onlineActiveNearbyAvailableDriverList.length == 0) {
       referenceRideRequest!.remove();
@@ -518,6 +525,7 @@ class _MapsState extends State<Maps> {
       });
       return;
     }
+    // récupérer les informations du conducteur en ligne
     await retrieveOnLineDriverInformation(onlineActiveNearbyAvailableDriverList);
     print("information du cle driver" +driversList.toString());
 
@@ -561,6 +569,7 @@ class _MapsState extends State<Maps> {
     }
   }
 
+  // mettre à jour Atteindre l'heure d'utilisation du point de depart
   Future updateReachingTimeToUseDropOffLocation(driverCurrentPositionLatLng) async{
     if (requestPositionInfo == true) {
       requestPositionInfo = false;
@@ -579,6 +588,7 @@ class _MapsState extends State<Maps> {
     }
   }
 
+  // afficher l'interface utilisateur pour les informations sur le pilote attribué
   Future showUIForAssigneDriverInfo() async{
     setState(() {
       waitingResponseFromDriverContainerHeight = 0;
@@ -589,6 +599,7 @@ class _MapsState extends State<Maps> {
     });
   }
 
+  // récupérer les informations du conducteur en ligne
   retrieveOnLineDriverInformation(List onLineNearesDriversList) async{
     driversList.clear();
     DatabaseReference ref = FirebaseDatabase.instance.ref().child("drivers");
@@ -763,11 +774,8 @@ class _MapsState extends State<Maps> {
                                                   fontSize: 14),
                                             ),
                                             Text(
-                                              Provider.of<AppInfo>(context)
-                                                          .userDropOfLocation !=
-                                                      null
-                                                  ? Provider.of<AppInfo>(
-                                                          context)
+                                              Provider.of<AppInfo>(context).userDropOfLocation != null
+                                                  ? Provider.of<AppInfo>(context)
                                                       .userDropOfLocation!
                                                       .locationName!
                                                   : "Où voulez-vous aller ?",
@@ -943,14 +951,14 @@ class _MapsState extends State<Maps> {
                                   children: [
                                     Image.asset("assets/icons/moto.png",),
                                     SizedBox(height: 6,),
-                                    Text("Moto",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : Colors.black,), ),
+                                    Text("Moto",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : Colors.black,fontSize: 16), ),
                                     SizedBox(height: 6,),
                                     Text(
                                        tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *50).toStringAsFixed(1)}"
                                         : "Null",
-                                      style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : MesCouleur().couleurPrincipal,), 
+                                      style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : MesCouleur().couleurPrincipal, fontSize: 20), 
                                       ),
-                                    Text("FCFA", style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : MesCouleur().couleurPrincipal,),)
+                                    Text("FCFA", style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 18),)
                                   ],
                                 ),
                               ),
@@ -972,14 +980,14 @@ class _MapsState extends State<Maps> {
                                   children: [
                                     Image.asset("assets/icons/car.png",),
                                     SizedBox(height: 6,),
-                                    Text("Economie",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : Colors.black,), ),
+                                    Text("Economie",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : Colors.black,fontSize: 16), ),
                                     SizedBox(height: 6,),
                                     Text(
                                         tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *88).toStringAsFixed(1)}"
                                         : "Null",
-                                      style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : MesCouleur().couleurPrincipal,),
+                                      style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 20),
                                       ),
-                                    Text("FCFA", style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : MesCouleur().couleurPrincipal,),)
+                                    Text("FCFA", style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 18),)
                                   ],
                                 ),
                               ),
@@ -1001,14 +1009,14 @@ class _MapsState extends State<Maps> {
                                   children: [
                                     Image.asset("assets/icons/4.png",),
                                     SizedBox(height: 6,),
-                                    Text("prenium",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : Colors.black,), ),
+                                    Text("prenium",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : Colors.black,fontSize: 16), ),
                                     SizedBox(height: 6,),
                                     Text(
                                         tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *107).toStringAsFixed(1)}"
                                         : "Null",
-                                      style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : MesCouleur().couleurPrincipal,),
+                                      style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 20),
                                       ),
-                                    Text("FCFA", style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : MesCouleur().couleurPrincipal,),)
+                                    Text("FCFA", style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 18),)
                                   ],
                                 ),
                               ),
@@ -1028,7 +1036,7 @@ class _MapsState extends State<Maps> {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => accueil()));
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.red,
                                     borderRadius: BorderRadius.circular(10),
@@ -1036,7 +1044,7 @@ class _MapsState extends State<Maps> {
                                   child: Center(
                                     child: Row(
                                       children: [
-                                        Icon(Icons.arrow_back_ios, color: Colors.white,),
+                                        Icon(Icons.arrow_back_ios, color: Colors.white,size: 30,),
                                         Text(
                                           "Annuler",
                                           style: TextStyle(
@@ -1060,9 +1068,9 @@ class _MapsState extends State<Maps> {
                                   }
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: MesCouleur().couleurPrincipal,
+                                    color: Colors.blue,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Center(
@@ -1074,11 +1082,12 @@ class _MapsState extends State<Maps> {
                                             color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold
                                           ),
                                         ),
-                                        // Icon(Icons.arrow_back_ios, color: Colors.white,)
+                                        Icon(Icons.check_rounded, color: Colors.white,size: 30,)
                                       ],
                                     ),
                                   ),
                                 ),
+
                               )
                               ),
                           ],
@@ -1086,7 +1095,72 @@ class _MapsState extends State<Maps> {
                       ],
                     ),
                   ),
-                )),
+                )
+                ),
+
+                // demander un trajet
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: searchingForDriverContainerHeight,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          LinearProgressIndicator(
+                            color: MesCouleur().couleurPrincipal,
+                          ),
+                          SizedBox(height: 10,),
+                          Center(
+                            child: Text(
+                              "Rechercher un chauffeur",
+                              style: TextStyle(),
+                            ),
+                          ),
+                          SizedBox(height: 20,),
+                          GestureDetector(
+                            onTap: () {
+                              referenceRideRequest!.remove();
+                              setState(() {
+                                searchLocationContainerHeight = 0;
+                                suggestedRidesContainerHeight = 0;
+                              });
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25),
+                                border: Border.all(width: 1, color: Colors.black),
+                              ),
+                              child: Icon(Icons.close, size: 25,color: Colors.black,),
+                            ),
+                          ),
+                          SizedBox(height: 15,),
+
+                          Container(
+                            width: double.infinity,
+                            child: Text(
+                              "Annuler",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ),
+                  ),
+                  )
+
             // InputSearch(),
           ],
         ),
