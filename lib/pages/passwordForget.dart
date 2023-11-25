@@ -112,6 +112,10 @@ class _PasswordForgetState extends State<PasswordForget> {
                                         onPressed: () async{
                                           await _submit();
                                         },
+                                        style: ElevatedButton.styleFrom(
+                                    backgroundColor: MesCouleur().couleurPrincipal// Définir la couleur du bouton
+                                    // Vous pouvez également personnaliser d'autres propriétés ici
+                                  ),
                                         child: Text(
                                           'Lien de réinitialisation envoyé',
                                           style: TextStyle(

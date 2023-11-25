@@ -321,6 +321,10 @@ class _InscriptionState extends State<Inscription> {
                                       onPressed: () async {
                                        await _submit();
                                       },
+                                      style: ElevatedButton.styleFrom(
+                                    backgroundColor: MesCouleur().couleurPrincipal// Définir la couleur du bouton
+                                    // Vous pouvez également personnaliser d'autres propriétés ici
+                                  ),
                                       child: Text(
                                         'S\'inscrire',
                                         style: TextStyle(

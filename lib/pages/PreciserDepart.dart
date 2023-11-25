@@ -71,7 +71,7 @@ class _PreciserDepartState extends State<PreciserDepart> {
 
       setState(() {
         Direction userPickUpAddress = Direction();
-        userPickUpAddress.locationLagitude = pickLocation!.latitude;
+        userPickUpAddress.locationLatitude = pickLocation!.latitude;
         userPickUpAddress.locationLongitude = pickLocation!.longitude;
         userPickUpAddress.locationName = data.address;
         // _address = data.address;

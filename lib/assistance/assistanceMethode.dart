@@ -46,7 +46,7 @@ class AssistanceMethode {
       humanReadableAdress = requestResponse["results"][0]["formatted_address"];
 
       Direction userPickUpAddress = Direction();
-      userPickUpAddress.locationLagitude = position.latitude;
+      userPickUpAddress.locationLatitude = position.latitude;
       userPickUpAddress.locationLongitude = position.longitude;
       userPickUpAddress.locationName = humanReadableAdress;
       
@@ -95,8 +95,8 @@ class AssistanceMethode {
     String destinationAdress = userDropOffAdress;
 
     Map<String,String> headerNotification ={
-        'Conetent-type': 'application/json',
-        'Autorization': cloudMessagingServerToken,
+        'Content-Type': 'application/json',
+        'Authorization': 'key=AAAAB5OWuDE:APA91bHdTuOWVFbMKf3a_hSnuKOlDHJ652nzleGr_YLI0W2phKe4WmkOcqKCxOZ2uOd6ojjuHX-3FILaz9G8_md8EaOzjGA5exttOwPVmLeN8afEFw4g7tDflMey1ky9XH8uOM4j4kw4',
     };
 
      Map bodyNotification = {
@@ -118,10 +118,16 @@ class AssistanceMethode {
       "to": deviceRegistrationToken,
     };
 
-    var responseNotification = http.post(
-      Uri.parse("https://fcm.googleapis.com/fcm/send"),
-      headers: headerNotification,
-      body: jsonEncode(officialNotificationFormat)
-    );
+    final response = await http.post(
+        Uri.parse("https://fcm.googleapis.com/fcm/send"),
+        headers: headerNotification,
+        body: jsonEncode(officialNotificationFormat));
+
+    if (response.statusCode == 200) {
+     print("Notification sent successfully");
+     print(dataMap.toString());
+    } else {
+      print("Failed to send notification. Status code: ${response.statusCode}");
+    }
   }
 }

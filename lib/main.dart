@@ -22,11 +22,13 @@ class TaxiTigui extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     
     return ChangeNotifierProvider(
       create: (context) => AppInfo(),
       child: MaterialApp(
       title: "TAXI TIGI",
       theme: ThemeData(
+        colorScheme: ColorScheme.light(background: Colors.white,primary: MesCouleur().couleurPrincipal),
         splashColor: MesCouleur().couleurPrincipal,
         primarySwatch: Colors.amber,
         fontFamily: "Poppins"

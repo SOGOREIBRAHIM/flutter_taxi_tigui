@@ -15,6 +15,7 @@ import 'package:flutter_taxi_tigui/models/active_nearby_availablewhen_driver.dar
 import 'package:flutter_taxi_tigui/pages/PreciserDepart.dart';
 import 'package:flutter_taxi_tigui/pages/accueil.dart';
 import 'package:flutter_taxi_tigui/pages/formAdresse.dart';
+import 'package:flutter_taxi_tigui/pages/infoChauff.dart';
 import 'package:flutter_taxi_tigui/splashScrum/splashScrum.dart';
 import 'package:flutter_taxi_tigui/widgets/progressDialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -67,7 +68,7 @@ class _MapsState extends State<Maps> {
 
   BitmapDescriptor? activeNearbyIcon;
 
-  double searchLocationContainerHeight = 200;
+  double searchLocationContainerHeight = 0;
   double suggestedRidesContainerHeight = 0;
   double searchingForDriverContainerHeight = 0;
   double  waitingResponseFromDriverContainerHeight = 0;
@@ -77,7 +78,7 @@ class _MapsState extends State<Maps> {
 
   DatabaseReference? referenceRideRequest;
 
-  String driverRideStatus = "Chauffeur arrive";
+  String driverRideStatus = "Chauffeur est en route";
 
   StreamSubscription<DatabaseEvent>? tripRideRequestinfoStreamSubscription;
 
@@ -112,13 +113,13 @@ class _MapsState extends State<Maps> {
     userName = userModelCurrentInfo!.nom!;
     userEmail = userModelCurrentInfo!.email!;
 
-    initializeGeoFireListener();
+    await initializeGeoFireListener();
 
     // AssistanceMethode.readCurrentOnlineInfo(context);
   }
 
   // initialiser geofire du drivers
-  initializeGeoFireListener() {
+  Future<void> initializeGeoFireListener() async{
     Geofire.initialize("activeDrivers");
 
     Geofire.queryAtLocation(
@@ -224,8 +225,8 @@ class _MapsState extends State<Maps> {
         Provider.of<AppInfo>(context, listen: false).userDropOfLocation;
 
     var originLatLng = LatLng(
-        originPosition!.locationLagitude!, originPosition.locationLongitude!);
-    var destinationLatLng = LatLng(destinationPosition!.locationLagitude!,
+        originPosition!.locationLatitude!, originPosition.locationLongitude!);
+    var destinationLatLng = LatLng(destinationPosition!.locationLatitude!,
         destinationPosition.locationLongitude!);
 
     showDialog(
@@ -346,13 +347,14 @@ class _MapsState extends State<Maps> {
     });
   }
 
-  Future<void> showSearchingForDriverContainer() async{
+   showSearchingForDriverContainer() async{
     setState(() {
-      searchLocationContainerHeight = 200;
+      // searchLocationContainerHeight = 200;
+      searchingForDriverContainerHeight = 200;
     });
   }
 
-  showSuggestedRidesContainer() {
+   showSuggestedRidesContainer() async{
     setState(() {
       suggestedRidesContainerHeight = 460;
       bottomPaddingOfMap = 400;
@@ -395,19 +397,20 @@ class _MapsState extends State<Maps> {
   saveRideRequestInformation(String selectedVehiculeType){
     // 1 enregistrer les reservations
     referenceRideRequest = FirebaseDatabase.instance.ref().child("All Ride Request");
+
     var originLocation = Provider.of<AppInfo>(context, listen: false).userPickeUpLocation;
-    var destinationLocation = Provider.of<AppInfo>(context, listen: false).userPickeUpLocation;
+    var destinationLocation = Provider.of<AppInfo>(context, listen: false).userDropOfLocation;
 
     Map originLocationMap = {
       // key: value
-      "latitude": originLocation!.locationLagitude.toString(),
+      "latitude": originLocation!.locationLatitude.toString(),
       "longitude": originLocation.locationLongitude.toString(),
 
     };
 
     Map destinationLocationMap = {
       // key: value
-      "latitude": destinationLocation!.locationLagitude.toString(),
+      "latitude": destinationLocation!.locationLatitude.toString(),
       "longitude": destinationLocation.locationLongitude.toString(),
 
     };
@@ -434,28 +437,29 @@ class _MapsState extends State<Maps> {
       if ((eventSnap.snapshot.value as Map)["details_car"] != null) {
         setState(() {
           driverCarDetails = (eventSnap.snapshot.value as Map)["details_car"].toString();
-          print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
           print(driverCarDetails);
-          print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         });
       }
       if ((eventSnap.snapshot.value as Map)["driverPhone"] != null) {
         setState(() {
           driverCarDetails = (eventSnap.snapshot.value as Map)["driverPhone"].toString();
+          print(driverCarDetails);
         });
       }
       if ((eventSnap.snapshot.value as Map)["driverName"] != null) {
         setState(() {
           driverCarDetails = (eventSnap.snapshot.value as Map)["driverName"].toString();
+          print(driverCarDetails);
         });
       }
       if ((eventSnap.snapshot.value as Map)["status"] != null) {
         setState(() {
           userRideRequestStatus = (eventSnap.snapshot.value as Map)["status"].toString();
+          print(userRideRequestStatus);
         });
       }
       if ((eventSnap.snapshot.value as Map)["driverLocation"] != null) {
-        setState(() async {
+        // setState(() async {
           double driverCurrentPositionLat = double.parse((eventSnap.snapshot.value as Map)["driverLocation"]["latitude"].toString());
           double driverCurrentPositionLong = double.parse((eventSnap.snapshot.value as Map)["driverLocation"]["longitude"].toString());
 
@@ -463,12 +467,12 @@ class _MapsState extends State<Maps> {
 
           // status = accepted
           if (userRideRequestStatus == "accepted") {
-            updateArrivalTimeToUserPickUpLocatio(driverCurrentPositionLatLng);
+            updateArrivalTimeToUserPickUpLocation(driverCurrentPositionLatLng);
           }
           // status = arrived
           if (userRideRequestStatus == "arrived") {
             setState(() {
-              driverRideStatus = "Chauffeur est arrivé ";
+              driverRideStatus = "Chauffeur est en route";
             });
           }
           // status = en deplacement
@@ -480,7 +484,7 @@ class _MapsState extends State<Maps> {
             if ((eventSnap.snapshot.value as Map)["fareAmount"] != null) {
               double fareAmount = double.parse((eventSnap.snapshot.value as Map)["fareAmount"].toString());
 
-              var response = await showDialog(
+              var response = showDialog(
                 context: context, 
                 builder: (BuildContext context) => PayFareAmountDialog(
                   fareAmount: fareAmount,
@@ -497,10 +501,12 @@ class _MapsState extends State<Maps> {
                 }
             }
           }
-        });
+        // }
+        // );
       }
     });
 
+    // Liste des conducteurs disponibles actifs à proximité en ligne
     onlineActiveNearbyAvailableDriverList = GeofireAssistance.activeNearbyAvailableDriverList;
     searchNearestOnlineDrivers(selectedVehiculeType);
 
@@ -508,25 +514,30 @@ class _MapsState extends State<Maps> {
 
   // rechercher les pilotes en ligne les plus proches
   searchNearestOnlineDrivers(String selectedVehiculeType) async{
-    if (onlineActiveNearbyAvailableDriverList.length == 0) {
+    if (onlineActiveNearbyAvailableDriverList.isEmpty) {
+      // Annuler/Supprimer les informations du trajet demandé
       referenceRideRequest!.remove();
 
       setState(() {
         polylineSet.clear();
         markersSet.clear();
-        circlesSet.clear();pLineCoordinatedList.clear();
+        circlesSet.clear();
+        pLineCoordinatedList.clear();
       });
+
       Fluttertoast.showToast(msg: "Pas de chauffeur en ligne disponible le plus proche");
       Fluttertoast.showToast(msg: "chercher à nouveau \n Redémarrage de App");
 
-      Future.delayed(Duration(milliseconds: 4000), (){
+      Future.delayed(const Duration(milliseconds: 4000), (){
         referenceRideRequest!.remove();
-        Navigator.push(context, MaterialPageRoute(builder: (c) => Slapsh(),));
+        Navigator.push(context, MaterialPageRoute(builder: (c) => accueil(),));
       });
       return;
     }
+
     // récupérer les informations du conducteur en ligne
     await retrieveOnLineDriverInformation(onlineActiveNearbyAvailableDriverList);
+
     print("information du cle driver" +driversList.toString());
 
     for (var i = 0; i < driversList.length; i++) {
@@ -535,11 +546,13 @@ class _MapsState extends State<Maps> {
       }
     }
 
-    Fluttertoast.showToast(msg: "Notification envoyé avec succè");
+    Fluttertoast.showToast(msg: "Notification envoyé avec succès");
 
-    showSearchingForDriverContainer();
+    // Container pour afficher les chauffeurs recherche
+    await showSearchingForDriverContainer();
 
-    await FirebaseDatabase.instance.ref().child("All Ride Requests").child(referenceRideRequest!.key!).onValue.listen((eventRideRequestSnapshot) { 
+    await FirebaseDatabase.instance.ref().child("All Ride Requests").child(referenceRideRequest!.key!).child("driverId").onValue.listen((eventRideRequestSnapshot) { 
+      print("############################################################");
       print("EventSnapshot: ${eventRideRequestSnapshot.snapshot.value}");
       if (eventRideRequestSnapshot.snapshot.value != null) {
         if (eventRideRequestSnapshot.snapshot.value != "waiting") {
@@ -549,7 +562,8 @@ class _MapsState extends State<Maps> {
     });
   }
 
-  Future updateArrivalTimeToUserPickUpLocatio(driverCurrentPositionLatLng) async{
+  // Heure d'arrivée mise à jour a l'emplacement de prise en charge de l'utilisateur
+  Future updateArrivalTimeToUserPickUpLocation(driverCurrentPositionLatLng) async{
     if (requestPositionInfo == true) {
       requestPositionInfo = true;
       LatLng userPickeUpLocation = LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
@@ -562,7 +576,7 @@ class _MapsState extends State<Maps> {
       }
 
       setState(() {
-        driverRideStatus = " Chauffeur arrive :" +directionDetailsInfo.duration_text.toString(); 
+        driverRideStatus = " Chauffeur est en route:" +directionDetailsInfo.duration_text.toString(); 
       });
 
       requestPositionInfo = true;
@@ -576,20 +590,22 @@ class _MapsState extends State<Maps> {
 
       var dropOffLocation = Provider.of<AppInfo>(context, listen: false).userDropOfLocation;
 
-      LatLng userDestionationInfo = LatLng(dropOffLocation!.locationLagitude!, dropOffLocation.locationLongitude!);
+      LatLng userDestionationInfo = LatLng(dropOffLocation!.locationLatitude!, dropOffLocation.locationLongitude!);
       var directionDetailsInfo = await AssistanceMethode.obtainOriginToDestinationDirectionDetails(driverCurrentPositionLatLng, userDestionationInfo);
+      
       if (directionDetailsInfo == null) {
         return;
       }
+      
       setState(() {
-        driverRideStatus = "Aller vers la destination " +directionDetailsInfo.duration_text.toString();
+        driverRideStatus = "Chauffeur est en route " +directionDetailsInfo.duration_text.toString();
       });
       requestPositionInfo = true;
     }
   }
 
   // afficher l'interface utilisateur pour les informations sur le pilote attribué
-  Future showUIForAssigneDriverInfo() async{
+   showUIForAssigneDriverInfo() {
     setState(() {
       waitingResponseFromDriverContainerHeight = 0;
       searchLocationContainerHeight = 0;
@@ -608,7 +624,7 @@ class _MapsState extends State<Maps> {
       await ref.child(onLineNearesDriversList[i].driverId.toString()).once().then((dataSnapshot) {
         var driverKeyInfo = dataSnapshot.snapshot.value;
         driversList.add(driverKeyInfo);
-        print("information du cle de driver" +driversList.toString());
+        print("Les informations du chauffeur" +driversList.toString());
       });
     }
   }
@@ -796,9 +812,11 @@ class _MapsState extends State<Maps> {
                             height: 5,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
+                                width: 170,
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -807,33 +825,45 @@ class _MapsState extends State<Maps> {
                                             builder: ((context) =>
                                                 PreciserDepart())));
                                   },
+                                  
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green, // Définir la couleur du bouton
+                                      // Vous pouvez également personnaliser d'autres propriétés ici
+                                    ),
                                   child: Text(
                                     "Position actuelle",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: 10,
+                                // width: ,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (Provider.of<AppInfo>(context, listen: false).userDropOfLocation != null) {
-                                    showSuggestedRidesContainer();
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: "Selectionner une destination");
-                                  }
-                                },
-                                child: Text(
-                                  "Obtenir les tarifs",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                              Container(
+                                width: 170,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    if (Provider.of<AppInfo>(context, listen: false).userDropOfLocation != null) {
+                                      await showSuggestedRidesContainer();
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "Selectionner une destination");
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: MesCouleur().couleurPrincipal// Définir la couleur du bouton
+                                    // Vous pouvez également personnaliser d'autres propriétés ici
+                                  ),
+                                  child: Text(
+                                    "Obtenir les tarifs",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               )
                             ],
@@ -1033,7 +1063,11 @@ class _MapsState extends State<Maps> {
                             Container(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => accueil()));
+                                  referenceRideRequest!.remove();
+                              setState(() {
+                                searchLocationContainerHeight = 0;
+                                suggestedRidesContainerHeight = 0;
+                              });
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
@@ -1099,7 +1133,7 @@ class _MapsState extends State<Maps> {
                 ),
 
                 // demander un trajet
-                Positioned(
+            Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
@@ -1121,7 +1155,7 @@ class _MapsState extends State<Maps> {
                           SizedBox(height: 10,),
                           Center(
                             child: Text(
-                              "Rechercher un chauffeur",
+                              "Rechercher un chauffeur ...",
                               style: TextStyle(),
                             ),
                           ),
@@ -1129,10 +1163,7 @@ class _MapsState extends State<Maps> {
                           GestureDetector(
                             onTap: () {
                               referenceRideRequest!.remove();
-                              setState(() {
-                                searchLocationContainerHeight = 0;
-                                suggestedRidesContainerHeight = 0;
-                              });
+                              Navigator.push(context, MaterialPageRoute(builder: (c)=> InfoChauff()));
                             },
                             child: Container(
                               height: 50,

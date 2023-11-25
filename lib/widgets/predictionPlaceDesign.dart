@@ -41,7 +41,7 @@ class _PredictionPlaceDesignState extends State<PredictionPlaceDesign> {
       Direction direction = Direction();
       direction.locationName = responseApi["result"]["name"];
       direction.locationId = placeId;
-      direction.locationLagitude = responseApi["result"]["geometry"]["location"]["lat"];
+      direction.locationLatitude = responseApi["result"]["geometry"]["location"]["lat"];
       direction.locationLongitude = responseApi["result"]["geometry"]["location"]["lng"];
 
       Provider.of<AppInfo>(context, listen: false).updateDropOffAdressLcation(direction);
