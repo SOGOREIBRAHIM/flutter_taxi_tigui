@@ -429,17 +429,19 @@ class _MapsState extends State<Maps> {
     referenceRideRequest!.set(userInformationMap);
 
     // Abonnement au flux des infos
-    tripRideRequestinfoStreamSubscription = referenceRideRequest!.onValue.listen((eventSnap) {
+    tripRideRequestinfoStreamSubscription = referenceRideRequest!.onValue.listen((eventSnap) async{
         
       if (eventSnap.snapshot.value == null) {
         return;
       }
+
       if ((eventSnap.snapshot.value as Map)["details_car"] != null) {
         setState(() {
           driverCarDetails = (eventSnap.snapshot.value as Map)["details_car"].toString();
           print(driverCarDetails);
         });
       }
+
       if ((eventSnap.snapshot.value as Map)["driverPhone"] != null) {
         setState(() {
           driverCarDetails = (eventSnap.snapshot.value as Map)["driverPhone"].toString();
@@ -491,6 +493,7 @@ class _MapsState extends State<Maps> {
                 )
                 );
 
+                // ignore: unrelated_type_equality_checks
                 if (response == "cash Paid") {
                   if ((eventSnap.snapshot.value as Map)["driverId"] != null) {
                     String assigneDriverId = (eventSnap.snapshot.value as Map)["driverId"].toString();
@@ -514,7 +517,7 @@ class _MapsState extends State<Maps> {
 
   // rechercher les pilotes en ligne les plus proches
   searchNearestOnlineDrivers(String selectedVehiculeType) async{
-    if (onlineActiveNearbyAvailableDriverList.isEmpty) {
+    if (onlineActiveNearbyAvailableDriverList.length == 0) {
       // Annuler/Supprimer les informations du trajet demandé
       referenceRideRequest!.remove();
 
@@ -551,7 +554,7 @@ class _MapsState extends State<Maps> {
     // Container pour afficher les chauffeurs recherche
     await showSearchingForDriverContainer();
 
-    await FirebaseDatabase.instance.ref().child("All Ride Requests").child(referenceRideRequest!.key!).child("driverId").onValue.listen((eventRideRequestSnapshot) { 
+    await FirebaseDatabase.instance.ref().child("All Ride Request").child(referenceRideRequest!.key!).child("driverId").onValue.listen((eventRideRequestSnapshot) { 
       print("############################################################");
       print("EventSnapshot: ${eventRideRequestSnapshot.snapshot.value}");
       if (eventRideRequestSnapshot.snapshot.value != null) {
@@ -816,7 +819,7 @@ class _MapsState extends State<Maps> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                width: 170,
+                                width: 180,
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -834,7 +837,7 @@ class _MapsState extends State<Maps> {
                                     "Position actuelle",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 15,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -843,7 +846,7 @@ class _MapsState extends State<Maps> {
                                 // width: ,
                               ),
                               Container(
-                                width: 170,
+                                width: 180,
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     if (Provider.of<AppInfo>(context, listen: false).userDropOfLocation != null) {
@@ -861,7 +864,7 @@ class _MapsState extends State<Maps> {
                                     "Obtenir les tarifs",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 15,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),

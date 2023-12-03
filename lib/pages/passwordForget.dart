@@ -59,8 +59,8 @@ class _PasswordForgetState extends State<PasswordForget> {
                         decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(70),
-                                topRight: Radius.circular(70))),
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(160))),
                         child: Column(
                           children: [
                             SizedBox(height: 50,),

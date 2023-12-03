@@ -24,7 +24,7 @@ class _profilState extends State<profil> {
 
   DatabaseReference userRef = FirebaseDatabase.instance.ref().child("users");
 
-  Future<void> showUserPrenomDialogAlert(BuildContext context, String prenom){
+  Future<void> showUserPrenomDialogAlert(BuildContext context, String prenom) async{
 
     prenomController.text = prenom;
     // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
@@ -84,7 +84,7 @@ class _profilState extends State<profil> {
       );
   }
 
- Future<void> showUserNomDialogAlert(BuildContext context, String nom){
+ Future<void> showUserNomDialogAlert(BuildContext context, String nom) async{
 
     nomController.text = nom;
     // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
@@ -144,16 +144,9 @@ class _profilState extends State<profil> {
       );
   }
 
- Future<void> showUserNumeroDialogAlert(BuildContext context, String numero){
+ Future<void> showUserNumeroDialogAlert(BuildContext context, String numero) async{
 
     numeroController.text = numero;
-    // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    // print(prenomController.text);
-    // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    // print(prenom);
-
     return showDialog(
       context: context, 
       builder: (context){
@@ -204,9 +197,13 @@ class _profilState extends State<profil> {
       );
   }
 
-Future<void> showUserEmailDialogAlert(BuildContext context, String email){
+Future<void> showUserEmailDialogAlert(BuildContext context, String? email) async{
 
-    emailController.text = email;
+    if (email == null) {
+      print(email);
+    }
+    emailController.text = email!;
+    
     // emailSubString = userModelCurrentInfo!.email!.substring(10, 90)+"...";
     // print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
     // print(prenomController.text);
@@ -263,6 +260,17 @@ Future<void> showUserEmailDialogAlert(BuildContext context, String email){
         );
       }
       );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    showUserEmailDialogAlert(context, null).then((value) {
+      setState(() {
+        
+      });
+    });
   }
 
 
@@ -355,8 +363,8 @@ Future<void> showUserEmailDialogAlert(BuildContext context, String email){
                             ),
                             ),
                             SizedBox(width: 160,),
-                            IconButton(onPressed: () {
-                               showUserPrenomDialogAlert(context, userModelCurrentInfo!.prenom!);
+                            IconButton(onPressed: () async {
+                               await showUserPrenomDialogAlert(context, userModelCurrentInfo!.prenom!);
                             }, icon: Icon(Icons.edit_outlined),color: MesCouleur().couleurPrincipal,
                             ),
                           ],
@@ -379,8 +387,8 @@ Future<void> showUserEmailDialogAlert(BuildContext context, String email){
                             ),
                             ),
                             SizedBox(width: 160,),
-                            IconButton(onPressed: () {
-                               showUserNomDialogAlert(context, userModelCurrentInfo!.nom!);
+                            IconButton(onPressed: () async{
+                              await showUserNomDialogAlert(context, userModelCurrentInfo!.nom!);
                             }, icon: Icon(Icons.edit_outlined),color: MesCouleur().couleurPrincipal,
                             ),
                           ],
@@ -403,8 +411,8 @@ Future<void> showUserEmailDialogAlert(BuildContext context, String email){
                             ),
                             ),
                             SizedBox(width: 110,),
-                            IconButton(onPressed: () {
-                               showUserNumeroDialogAlert(context, userModelCurrentInfo!.phone!);
+                            IconButton(onPressed: () async{
+                              await showUserNumeroDialogAlert(context, userModelCurrentInfo!.phone!);
                             }, icon: Icon(Icons.edit_outlined),color: MesCouleur().couleurPrincipal,
                             ),
                           ],
@@ -420,17 +428,20 @@ Future<void> showUserEmailDialogAlert(BuildContext context, String email){
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [       
                             Icon(Icons.email_outlined,color: MesCouleur().couleurPrincipal,),
-                            SizedBox(width: 4,),
+                            
                             Text(
-                              "${userModelCurrentInfo!.email!}",
+                               "${userModelCurrentInfo!.email!.length > 18
+                                  ? "${userModelCurrentInfo!.email!.substring(0, 10)}..."
+                                  : userModelCurrentInfo!.email!}",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold
                             ),
                             ),
-                          
-                            IconButton(onPressed: () {
-                               showUserEmailDialogAlert(context,userModelCurrentInfo!.email!);
+                            SizedBox(width: 80,),
+                            IconButton(
+                              onPressed: () async{
+                              await showUserEmailDialogAlert(context,userModelCurrentInfo!.email!);
                             }, icon: Icon(Icons.edit_outlined),color: MesCouleur().couleurPrincipal,
                             ),
                           ],

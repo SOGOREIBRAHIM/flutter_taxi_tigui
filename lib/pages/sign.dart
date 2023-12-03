@@ -91,8 +91,8 @@ class _InscriptionState extends State<Inscription> {
                       decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 255, 255, 255),
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(70),
-                              topRight: Radius.circular(70))),
+                              topLeft: Radius.circular(80),
+                              topRight: Radius.circular(80))),
                       child: Column(
                         children: [
                           Form(

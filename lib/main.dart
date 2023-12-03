@@ -28,7 +28,7 @@ class TaxiTigui extends StatelessWidget {
       child: MaterialApp(
       title: "TAXI TIGI",
       theme: ThemeData(
-        colorScheme: ColorScheme.light(background: Colors.white,primary: MesCouleur().couleurPrincipal),
+        colorScheme: ColorScheme.light(primary: MesCouleur().couleurPrincipal),
         splashColor: MesCouleur().couleurPrincipal,
         primarySwatch: Colors.amber,
         fontFamily: "Poppins"

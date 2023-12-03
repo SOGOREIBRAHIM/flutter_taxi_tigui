@@ -41,7 +41,7 @@ class _SlapshState extends State<Slapsh> {
       body: Container(
         decoration: BoxDecoration(color: Colors.black),
           child: Image.asset(
-        "assets/images/demarrage.png",
+        "assets/images/pub.png",
         height: MediaQuery.sizeOf(context).height,
       )),
     );
