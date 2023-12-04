@@ -89,7 +89,6 @@ class _MapsState extends State<Maps> {
   bool requestPositionInfo = true;
 
   // bool darkTheme = false;
-
   Future<void> locateUserPosition() async {
     Position cPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);

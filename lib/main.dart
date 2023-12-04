@@ -40,6 +40,7 @@ class TaxiTigui extends StatelessWidget {
         "/apropos": (context) => Apropos(),
       },
       home: Slapsh(),
+      
     ),
     );
   }

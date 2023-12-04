@@ -157,6 +157,11 @@ class _PreciserDepartState extends State<PreciserDepart> {
               child: Padding(
                 padding: EdgeInsets.all(12),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: MesCouleur()
+                          .couleurPrincipal // Définir la couleur du bouton
+                      // Vous pouvez également personnaliser d'autres propriétés ici
+                      ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
