@@ -100,7 +100,7 @@ class AssistanceMethode {
     };
 
      Map bodyNotification = {
-      "body": "Destination Address: \n $destinationAdress",
+      "body": "Adresse de destination: \n $destinationAdress",
       "title": "Nouvelle demande de reservation"
     };
 

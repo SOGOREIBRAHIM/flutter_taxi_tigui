@@ -425,7 +425,7 @@ class _MapsState extends State<Maps> {
       "driverId" : "waiting",
     };
 
-    referenceRideRequest!.set(userInformationMap);
+    referenceRideRequest!.child(userModelCurrentInfo!.phone!).set(userInformationMap);
 
     // Abonnement au flux des infos
     tripRideRequestinfoStreamSubscription = referenceRideRequest!.onValue.listen((eventSnap) async{
@@ -492,7 +492,7 @@ class _MapsState extends State<Maps> {
                 )
                 );
 
-                // ignore: unrelated_type_equality_checks
+            
                 if (response == "cash Paid") {
                   if ((eventSnap.snapshot.value as Map)["driverId"] != null) {
                     String assigneDriverId = (eventSnap.snapshot.value as Map)["driverId"].toString();
@@ -1164,7 +1164,7 @@ class _MapsState extends State<Maps> {
                           SizedBox(height: 20,),
                           GestureDetector(
                             onTap: () {
-                              referenceRideRequest!.remove();
+                              // referenceRideRequest!.child(userModelCurrentInfo!.phone!).remove();
                               Navigator.push(context, MaterialPageRoute(builder: (c)=> InfoChauff()));
                             },
                             child: Container(

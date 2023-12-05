@@ -47,7 +47,7 @@ class _InfoChauffState extends State<InfoChauff> {
                   children: [
                     SizedBox(
                       height: 180,
-                      width: 160,
+                      width: 200,
                       child: Column(
                         children: [
                           Padding(
