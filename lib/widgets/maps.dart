@@ -606,7 +606,7 @@ class _MapsState extends State<Maps> {
     }
   }
 
-  // afficher l'interface utilisateur pour les informations sur le pilote attribué
+  // afficher l'interface utilisateur pour les informations sur le drivers attribué
    showUIForAssigneDriverInfo() {
     setState(() {
       waitingResponseFromDriverContainerHeight = 0;
@@ -986,7 +986,7 @@ class _MapsState extends State<Maps> {
                                     Text("Moto",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : Colors.black,fontSize: 16), ),
                                     SizedBox(height: 6,),
                                     Text(
-                                       tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *50).toStringAsFixed(1)}"
+                                       tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *60).toStringAsFixed(1)}"
                                         : "Null",
                                       style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "moto" ? Colors.white : MesCouleur().couleurPrincipal, fontSize: 20), 
                                       ),
@@ -1015,7 +1015,7 @@ class _MapsState extends State<Maps> {
                                     Text("Economie",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : Colors.black,fontSize: 16), ),
                                     SizedBox(height: 6,),
                                     Text(
-                                        tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *88).toStringAsFixed(1)}"
+                                        tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *98).toStringAsFixed(1)}"
                                         : "Null",
                                       style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "Economie" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 20),
                                       ),
@@ -1044,7 +1044,7 @@ class _MapsState extends State<Maps> {
                                     Text("prenium",style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : Colors.black,fontSize: 16), ),
                                     SizedBox(height: 6,),
                                     Text(
-                                        tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *107).toStringAsFixed(1)}"
+                                        tripDirectionDetailsInfo != null ? "${((AssistanceMethode.calculFareAmountFromOriginToDestination(tripDirectionDetailsInfo!)*2) *117).toStringAsFixed(1)}"
                                         : "Null",
                                       style: TextStyle(fontWeight: FontWeight.bold,color: selectedVehiculeType == "prenium" ? Colors.white : MesCouleur().couleurPrincipal,fontSize: 20),
                                       ),
